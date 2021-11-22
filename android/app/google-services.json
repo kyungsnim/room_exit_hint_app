@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "925313297084",
+    "firebase_url": "https://wemos-dd8af-default-rtdb.firebaseio.com",
+    "project_id": "wemos-dd8af",
+    "storage_bucket": "wemos-dd8af.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:925313297084:android:865be04571c8cb51873eb9",
+        "android_client_info": {
+          "package_name": "com.kyungsnim.room_exit_hint_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "925313297084-eqg20kne0o72ik8kdj5amap3jcsshfp3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kyungsnim.room_exit_hint_app",
+            "certificate_hash": "c7db24fd69f5efb54f9069c9dae8f41fa7d666c3"
+          }
+        },
+        {
+          "client_id": "925313297084-kfl4ji1qfh58ug7692tlf2cbps1c9b0i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDH4RwmsHMR7GGqY3hnKNbUnevMndaSqVw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "925313297084-kfl4ji1qfh58ug7692tlf2cbps1c9b0i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
