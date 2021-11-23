@@ -8,17 +8,19 @@ import 'package:room_exit_hint_app/screens/hint_screen.dart';
 import 'package:room_exit_hint_app/screens/messenger_screen.dart';
 import 'package:room_exit_hint_app/screens/rewind_hint_screen.dart';
 import 'package:room_exit_hint_app/screens/setting_screen.dart';
+import 'package:room_exit_hint_app/screens/waiting_room_screen.dart';
+import 'package:room_exit_hint_app/widgets/show_delete_dialog.dart';
 
-class MyRoomMainScreen extends StatefulWidget {
+class MyRoomScreen extends StatefulWidget {
   RoomModel room;
 
-  MyRoomMainScreen({required this.room, Key? key}) : super(key: key);
+  MyRoomScreen({required this.room, Key? key}) : super(key: key);
 
   @override
-  _MyRoomMainScreenState createState() => _MyRoomMainScreenState();
+  _MyRoomScreenState createState() => _MyRoomScreenState();
 }
 
-class _MyRoomMainScreenState extends State<MyRoomMainScreen> {
+class _MyRoomScreenState extends State<MyRoomScreen> {
   Timer? _timer;
 
   @override
@@ -28,10 +30,10 @@ class _MyRoomMainScreenState extends State<MyRoomMainScreen> {
   }
   @override
   Widget build(BuildContext context) {
-    _timer = Timer.periodic(Duration(milliseconds: 10), (timer) {
+    _timer = Timer.periodic(const Duration(milliseconds: 10), (timer) {
       if(mounted) {
         setState(() {
-          widget.room.endTime.add(Duration(seconds: 1));
+          widget.room.endTime.add(const Duration(seconds: 1));
         });
       }
     });
@@ -42,24 +44,12 @@ class _MyRoomMainScreenState extends State<MyRoomMainScreen> {
           backgroundColor: Colors.black54,
           title: Column(
             children: [
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.end,
-              //   children: [
-              //     InkWell(
-              //       onTap: () => Get.to(() => SettingScreen()),
-              //       child: Icon(
-              //         Icons.settings,
-              //         color: Colors.white,
-              //       ),
-              //     )
-              //   ],
-              // ),
               customAppBarView('🌈', '테마 ${widget.room.roomType}'),
               customAppBarView('🕰', '${widget.room.endTime.difference(DateTime.now()).inMinutes}분 ${widget.room.endTime.difference(DateTime.now()).inSeconds % 60}초 남음'),
               customAppBarView('⭐️', "사용한 힌트 수 ${widget.room.usedHintCount}개 / 전체 힌트 수 ${widget.room.hintCount.toString()}개"),
             ],
           ),
-          toolbarHeight: Get.height * 0.15,
+          toolbarHeight: Get.height * 0.1,
           bottom: widget.room.isStarted
               ? TabBar(
             labelColor: Colors.white,
@@ -109,6 +99,15 @@ class _MyRoomMainScreenState extends State<MyRoomMainScreen> {
             textAlign: TextAlign.center,
           ),
         ),
+        floatingActionButton: currentUser.id == 'admin'
+            ? FloatingActionButton(
+          onPressed: () {
+            showDeleteDialog(context, widget.room);
+          },
+          child: const Icon(Icons.delete),
+          backgroundColor: kPrimaryColor,
+        )
+            : SizedBox(),
       ),
     );
   }

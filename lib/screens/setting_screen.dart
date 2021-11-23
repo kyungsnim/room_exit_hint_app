@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:room_exit_hint_app/models/room_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'login/sign_in_with_user_id.dart';
 
 class SettingScreen extends StatefulWidget {
-  const SettingScreen({Key? key}) : super(key: key);
+  RoomModel? room;
+  SettingScreen({this.room, Key? key}) : super(key: key);
 
   @override
   _SettingScreenState createState() => _SettingScreenState();

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:room_exit_hint_app/models/room_model.dart';
 import 'package:room_exit_hint_app/screens/waiting_room_screen.dart';
 
@@ -64,6 +65,10 @@ class DatabaseService {
 
   useHintCountUp(String roomId, int usedHintCount) async {
     return roomReference.doc(roomId).update({'usedHintCount': usedHintCount});
+  }
+
+  deleteRoom(RoomModel room) async {
+    return roomReference.doc(room.id).delete();
   }
 
   Future<void> addUser(Map pUserMap, String userId) async {

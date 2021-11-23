@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:room_exit_hint_app/constants/constants.dart';
 import 'package:room_exit_hint_app/db/database.dart';
 import 'package:room_exit_hint_app/models/room_model.dart';
-import 'package:room_exit_hint_app/screens/my_room_main_screen.dart';
+import 'package:room_exit_hint_app/screens/my_room_screen.dart';
 import 'package:room_exit_hint_app/screens/waiting_room_screen.dart';
 
 import '../home_screen.dart';
@@ -115,7 +115,7 @@ showPasswordDialog(
                 } else {
                   pwdController.text = '';
                   Navigator.pop(context);
-                  Get.to(() => MyRoomMainScreen(room: room,));
+                  Get.to(() => MyRoomScreen(room: room,));
                 }
               },
             ),

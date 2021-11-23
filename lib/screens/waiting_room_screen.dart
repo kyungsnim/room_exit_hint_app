@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:provider/src/provider.dart';
 import 'package:room_exit_hint_app/constants/constants.dart';
@@ -11,7 +12,7 @@ import 'package:room_exit_hint_app/models/current_user.dart';
 import 'package:room_exit_hint_app/models/room_model.dart';
 import 'package:room_exit_hint_app/notification/notification_bloc.dart';
 import 'package:room_exit_hint_app/notification/notification_service.dart';
-import 'package:room_exit_hint_app/screens/my_room_main_screen.dart';
+import 'package:room_exit_hint_app/screens/my_room_screen.dart';
 import 'package:room_exit_hint_app/screens/setting_screen.dart';
 import 'package:room_exit_hint_app/widgets/show_password_dialog.dart';
 
@@ -21,16 +22,17 @@ import 'make_room_screen.dart';
 final roomReference = FirebaseFirestore.instance.collection('Rooms');
 final hintReference = FirebaseFirestore.instance.collection('Hints');
 final userReference =
-FirebaseFirestore.instance.collection('Users'); // 사용자 정보 저장을 위한 ref
+    FirebaseFirestore.instance.collection('Users'); // 사용자 정보 저장을 위한 ref
 
 CurrentUser currentUser = CurrentUser(
     id: "",
     password: "",
     validateByAdmin: false,
-    createdAt: DateTime.now(), name: '', phoneNumber: '',
+    createdAt: DateTime.now(),
+    name: '',
+    phoneNumber: '',
     role: 'general',
-  FCMToken: ''
-);
+    FCMToken: '');
 
 class WaitingRoomScreen extends StatefulWidget {
   const WaitingRoomScreen({Key? key}) : super(key: key);
@@ -56,12 +58,11 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
     NotificationService().getToken().then((value) async {
       print('Token : $value');
       print('DB Token : ${currentUser.FCMToken}');
+
       /// token 이 갱신된 경우 업데이트
       if (currentUser.FCMToken != "" && currentUser.FCMToken != value!) {
         print('here');
-        await userReference.doc(currentUser.id).update({
-          'FCMToken': value
-        });
+        await userReference.doc(currentUser.id).update({'FCMToken': value});
       }
     });
 
@@ -76,37 +77,40 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('대기실'),
-        backgroundColor: kPrimaryColor,
-        actions: [
-          InkWell(
-            onTap: () {
-              _timer?.cancel();
-              Get.to(() => SettingScreen());
+    return WillPopScope(
+      onWillPop: () => showExitDialog(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('대기실'),
+          backgroundColor: kPrimaryColor,
+          actions: [
+            InkWell(
+              onTap: () {
+                _timer?.cancel();
+                Get.to(() => SettingScreen());
               },
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Icon(
-                Icons.settings,
-                color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Icon(
+                  Icons.settings,
+                  color: Colors.white,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
+        body: _buildRoomList(),
+        floatingActionButton: currentUser.id == 'admin'
+            ? FloatingActionButton(
+                onPressed: () {
+                  _timer?.cancel();
+                  Get.to(() => MakeRoomScreen());
+                },
+                child: Icon(Icons.add),
+                backgroundColor: kPrimaryColor,
+              )
+            : SizedBox(),
       ),
-      body: _buildRoomList(),
-      floatingActionButton: currentUser.id == 'admin'
-          ? FloatingActionButton(
-              onPressed: () {
-                _timer?.cancel();
-                Get.to(() => MakeRoomScreen());
-              },
-              child: Icon(Icons.add),
-              backgroundColor: kPrimaryColor,
-            )
-          : SizedBox(),
     );
   }
 
@@ -135,7 +139,7 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
 
   _buildItem(RoomModel room) {
     _timer = Timer.periodic(Duration(milliseconds: 10), (timer) {
-      if(mounted) {
+      if (mounted) {
         setState(() {
           room.endTime.add(Duration(seconds: 1));
         });
@@ -145,7 +149,7 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
       onTap: () {
         _timer!.cancel();
         room.isStarted
-            ? Get.to(() => MyRoomMainScreen(room: room))
+            ? Get.to(() => MyRoomScreen(room: room))
             : showPasswordDialog(context, pwdController, room);
       },
       child: Padding(
@@ -231,5 +235,48 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
           fontSize: Get.width * 0.045,
           fontWeight: FontWeight.bold),
     );
+  }
+
+  showExitDialog() async {
+    await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('앱 종료',
+                style: TextStyle(
+                  fontFamily: 'Binggrae',
+                )),
+            content: Text(
+              '종료하시겠습니까?',
+              style: TextStyle(fontFamily: 'Binggrae'),
+            ),
+            actions: [
+              ElevatedButton(
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  child: Text('확인',
+                      style: TextStyle(fontFamily: 'Binggrae', fontSize: Get.width * 0.05)),
+                ),
+                style: ElevatedButton.styleFrom(primary: kPrimaryColor),
+                onPressed: () async {
+                  SystemNavigator.pop();
+                },
+              ),
+              ElevatedButton(
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  child: Text('취소',
+                      style: TextStyle(
+                          fontFamily: 'Binggrae',
+                          fontSize: Get.width * 0.05)),
+                ),
+                style: ElevatedButton.styleFrom(primary: kPrimarySecondColor),
+                onPressed: () async {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        });
   }
 }

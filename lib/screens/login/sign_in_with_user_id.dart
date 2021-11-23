@@ -94,7 +94,7 @@ class SignInPageWithUserIdState extends State<SignInPageWithUserId> {
     DocumentSnapshot dbUserData;
     // dbUserData = await ds.getUserLoginInfo(userId);
     print('userId : $userId');
-    dbPassword = await ds.getUserLoginInfo(userId!);
+    dbPassword = await ds.getUserLoginInfo(userId!); // a = 3
 
     // 수험번호가 잘못 입력된 경우
     if (dbPassword == 'ID error') {
@@ -122,7 +122,7 @@ class SignInPageWithUserIdState extends State<SignInPageWithUserId> {
             title: Text(title),
             content: Text(content),
             actions: [
-              FlatButton(
+              TextButton(
                 child: Container(
                   padding: const EdgeInsets.all(16),
                   child: const Text('확인',
