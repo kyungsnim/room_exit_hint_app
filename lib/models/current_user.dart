@@ -1,13 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CurrentUser {
-  String id; // 수험번호 (학번)
+  String id;
   String password;
-  String name; // 이름
-  String phoneNumber; // 휴대폰번호
-  bool validateByAdmin; // 검증 전/후
+  String name;
+  String phoneNumber;
+  bool validateByAdmin;
   DateTime createdAt;
   String role;
+  String FCMToken;
 
   CurrentUser(
       {required this.id,
@@ -16,18 +17,20 @@ class CurrentUser {
         required this.phoneNumber,
         required this.validateByAdmin,
         required this.createdAt,
-      required this.role});
+      required this.role,
+      required this.FCMToken});
 
   factory CurrentUser.fromDocument(DocumentSnapshot doc) {
     var getDocs = doc.data() as Map<String, dynamic>;
     return CurrentUser(
         id: doc.id,
         password: getDocs["password"],
-        name: getDocs["name"] ?? "-",
+        name: getDocs["name"] ?? doc.id,
         phoneNumber:
             getDocs["phoneNumber"] ?? "-",
         validateByAdmin: getDocs["validateByAdmin"],
         createdAt: getDocs["createdAt"].toDate(),
-    role: getDocs["role"] ?? "general");
+    role: getDocs["role"] ?? "general",
+    FCMToken: getDocs["FCMToken"] ?? "");
   }
 }

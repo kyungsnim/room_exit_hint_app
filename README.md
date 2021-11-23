@@ -1,10 +1,21 @@
 # room exit
 
+# 진행사항
+## 2021.11.23(화)
+- 방 만들기, 힌트보기, 메신저 구현완료
+- 푸시 알림 launcher_icon 해결하는 중
+
 ## 기능 요구사항 상세
+- 회원가입, 로그인 : 자동로그인
+- (관리자) 방 만들기 : 시간, 제공힌트수, 테마
 - 테마별 룸 입장하기 : 비밀번호 입력으로 들어갈 것
     - 남은 시간 변경 가능하도록 해야 할지?
     - 힌트 수는 최초에 몇 개 지급이 되는 것인지, 단순히 사용한 힌트 수만 늘려주면 되는 것인지?
 - 메신저 :
+
+=> 힌트 보기시 Realtime Database 동작 소스
+  final DatabaseReference db = FirebaseDatabase().reference();
+  db.child('thema1').once().then((DataSnapshot result) => print('result = ${result.value['room_A']}'));
 
 ## 전체 화면 구성
 - [힌트] : 현재 인원모집 중인(풀방 포함) 모든 방의 목록을 보여주기 (리스트 및 캘린더 형태, 탭하여 두 가지 보여주기 방식을 변경 가능)

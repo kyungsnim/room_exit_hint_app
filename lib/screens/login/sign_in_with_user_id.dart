@@ -98,12 +98,12 @@ class SignInPageWithUserIdState extends State<SignInPageWithUserId> {
 
     // 수험번호가 잘못 입력된 경우
     if (dbPassword == 'ID error') {
-      checkIdPasswordPopup('수험번호 확인', "존재하지 않는 수험번호입니다.");
+      checkIdPasswordPopup('아이디 확인', "존재하지 않는 아이디입니다.");
     } else if (password != dbPassword) {
       checkIdPasswordPopup('비밀번호 확인', "비밀번호가 잘못 입력되었습니다.");
     } else {
       // 해당 정보 다시 가져오기
-      dbUserData = await userReference.doc(userId).get();
+      dbUserData = await ds.getUserInfo(userId!);
       // 현재 유저정보에 값 셋팅하기
       setState(() {
         currentUser = CurrentUser.fromDocument(dbUserData);

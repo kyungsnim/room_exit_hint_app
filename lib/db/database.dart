@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:room_exit_hint_app/models/room_model.dart';
+import 'package:room_exit_hint_app/screens/waiting_room_screen.dart';
 
 import '../home_screen.dart';
 
@@ -23,6 +25,45 @@ class DatabaseService {
     }
 
     return password;
+  }
+
+  getUserInfo(String userId) async {
+    return userReference.doc(userId).get();
+  }
+
+  Future<void> addRoom(Map<String, dynamic> roomMap) async {
+    await roomReference
+        .doc(roomMap['id'])
+        .set(roomMap)
+        .catchError((e) => print(e.toString()));
+
+    await roomReference
+        .doc(roomMap['id'])
+        .collection('Chats')
+        .add({
+      'message': '방탈출 게임 관련 문의가 있는 경우 언제든 메시지 주세요!',
+      'type': 'notify',
+      'time': DateTime.now(),
+    });
+  }
+
+  gameStart(RoomModel room) async {
+    await roomReference.doc(room.id).update({
+      'isStarted': true,
+      'endTime': DateTime.now().add(Duration(minutes: room.playTime.toInt()))
+    });
+  }
+
+  viewHint(String hintCode, String roomType) async {
+    return hintReference.doc(roomType).get();
+  }
+
+  saveHintHistory(String roomId, List<dynamic> hintHistory) async {
+    return roomReference.doc(roomId).update({'hintHistory': hintHistory});
+  }
+
+  useHintCountUp(String roomId, int usedHintCount) async {
+    return roomReference.doc(roomId).update({'usedHintCount': usedHintCount});
   }
 
   Future<void> addUser(Map pUserMap, String userId) async {

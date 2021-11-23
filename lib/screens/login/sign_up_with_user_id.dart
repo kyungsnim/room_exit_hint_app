@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:room_exit_hint_app/db/database.dart';
 import 'package:room_exit_hint_app/widgets/login_button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUpPageWithUserId extends StatefulWidget {
   const SignUpPageWithUserId({Key? key}) : super(key: key);
@@ -45,6 +46,7 @@ class SignUpPageWithUserIdState extends State<SignUpPageWithUserId> {
   }
 
   signUpWithUserIdPassword() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
       Map<dynamic, dynamic> userMap = {
         "id": userId,
@@ -52,6 +54,7 @@ class SignUpPageWithUserIdState extends State<SignUpPageWithUserId> {
         "validateByAdmin": true, // 최초 회원가입시 관리자 검증 false
         "name": name,
         "role": "student",
+        'FCMToken': prefs.get('FCMToken') ?? 'NOToken',
         "createdAt": DateTime.now()
       };
       await ds.addUser(userMap, userId!);
@@ -350,10 +353,7 @@ class SignUpPageWithUserIdState extends State<SignUpPageWithUserId> {
                                         Colors.white)),
                               ],
                             ),
-                      const SizedBox(height: 50),
-                      Text('© Copyright ${DateTime.now().year} by xxxxxxx',
-                          style: const TextStyle(color: Colors.white54, fontSize: 12)),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 100),
                     ])),
           ),
         ]));
