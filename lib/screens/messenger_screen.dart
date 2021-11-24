@@ -69,6 +69,11 @@ class _MessengerScreenState extends State<MessengerScreen> {
       //   'lastMessageTime': FieldValue.serverTimestamp(),
       // });
 
+
+      /// 토큰 어떻게 추가해줄지 고민해보자.
+      roomReference.doc(widget.roomId).get().then((ds) {
+
+      });
       List<String> tokenList = [currentUser.FCMToken];
 
       /// push notification

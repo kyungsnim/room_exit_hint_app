@@ -8,6 +8,7 @@ class RoomModel {
   String password;
   bool isStarted;
   List<dynamic> hintHistory;
+  List<dynamic> tokenList;
 
   RoomModel(
       { required this.id,
@@ -18,7 +19,8 @@ class RoomModel {
         required this.endTime,
       required this.password,
       required this.isStarted,
-      required this.hintHistory});
+      required this.hintHistory,
+      required this.tokenList});
 
   factory RoomModel.fromMap(Map data) {
     return RoomModel(
@@ -31,6 +33,7 @@ class RoomModel {
       password: data['password'],
       isStarted: data['isStarted'] ?? false,
       hintHistory: data['hintHistory'] ?? [],
+      tokenList: data['tokenList'] ?? [],
     );
   }
 
@@ -45,6 +48,7 @@ class RoomModel {
       password: data['password'],
       isStarted: data['isStarted'] ?? false,
       hintHistory: data['hintHistory'] ?? [],
+      tokenList: data['tokenList'] ?? [],
     );
   }
 
@@ -57,6 +61,8 @@ class RoomModel {
       "playTime": playTime,
       "endTime": endTime,
       "isStarted": isStarted,
+      "hintHistory": hintHistory,
+      "tokenList": tokenList,
     };
   }
 }

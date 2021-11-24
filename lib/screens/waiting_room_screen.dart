@@ -148,7 +148,8 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
     return InkWell(
       onTap: () {
         _timer!.cancel();
-        room.isStarted
+        /// 게임중이고 관리자인 경우엔 바로 접속
+        room.isStarted && currentUser.id == 'admin'
             ? Get.to(() => MyRoomScreen(room: room))
             : showPasswordDialog(context, pwdController, room);
       },
@@ -160,7 +161,12 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
               width: Get.height * 0.3,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                color: Colors.grey,
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    offset: Offset(0,0), blurRadius: 2, color: Colors.grey,
+                  )
+                ]
               ),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -223,7 +229,7 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
   titleText(String title) {
     return Text(
       title,
-      style: TextStyle(color: Colors.white, fontSize: Get.width * 0.04),
+      style: TextStyle(color: Colors.black87, fontSize: Get.width * 0.04),
     );
   }
 
@@ -231,7 +237,7 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
     return Text(
       content,
       style: TextStyle(
-          color: Colors.white,
+          color: Colors.black87,
           fontSize: Get.width * 0.045,
           fontWeight: FontWeight.bold),
     );

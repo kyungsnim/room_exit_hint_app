@@ -93,6 +93,7 @@ showPasswordDialog(
               style: ElevatedButton.styleFrom(primary: Colors.indigoAccent),
               onPressed: () {
                 DatabaseService().gameStart(room);
+                DatabaseService().addFcmToken(room, [currentUser.FCMToken]);
                 Get.back();
               },
             ) : SizedBox(),
@@ -115,6 +116,14 @@ showPasswordDialog(
                 } else {
                   pwdController.text = '';
                   Navigator.pop(context);
+
+                  /// 사용자 입장시 사용자의 토큰값 저장
+                  List<String> tokenList = [];
+                  for(int i = 0; i < room.tokenList.length; i++) {
+                    tokenList.add(room.tokenList[i]);
+                  }
+                  tokenList.add(currentUser.FCMToken);
+                  DatabaseService().addFcmToken(room, tokenList);
                   Get.to(() => MyRoomScreen(room: room,));
                 }
               },

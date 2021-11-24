@@ -334,6 +334,8 @@ class _MakeRoomScreenState extends State<MakeRoomScreen> {
           'hintCount': hintCount,
           'playTime': playTime,
           'password': passwordController.text,
+          'hintHistory': [],
+          'tokenList': [],
           'endTime': DateTime.now(),
         };
 

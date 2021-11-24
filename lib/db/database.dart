@@ -55,6 +55,12 @@ class DatabaseService {
     });
   }
 
+  addFcmToken(RoomModel room, List<dynamic> tokenList) async {
+    await roomReference.doc(room.id).update({
+      'tokenList': tokenList
+    });
+  }
+
   viewHint(String hintCode, String roomType) async {
     return hintReference.doc(roomType).get();
   }
