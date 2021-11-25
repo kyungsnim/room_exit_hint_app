@@ -100,7 +100,11 @@ class _MessengerScreenState extends State<MessengerScreen> {
     /// 토큰 ㄱㅏ져오기 : 길이가 2이면 ok, 길이가 1이면 관리자만 있는 상태
     roomReference.doc(widget.roomId).get().then((DocumentSnapshot ds) {
       Map<String, dynamic> dsMap = ds.data() as Map<String, dynamic>;
+      print(dsMap['tokenList']);
       tokenList = dsMap['tokenList'];
+      for(int i = 0; i < dsMap['tokenList'].length; i++){
+        print(dsMap['tokenList'][i]);
+      }
     });
   }
 

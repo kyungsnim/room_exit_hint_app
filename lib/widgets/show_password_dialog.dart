@@ -119,11 +119,22 @@ showPasswordDialog(
                   Navigator.pop(context);
 
                   /// 사용자 입장시 사용자의 토큰값 저장
-                  List<String> tokenList = [];
+                  List<dynamic>? tokenList;
+                  bool alreadySavedToken = false;
                   for(int i = 0; i < room.tokenList.length; i++) {
-                    tokenList.add(room.tokenList[i]);
+                    if(currentUser.FCMToken == room.tokenList[i]) {
+                      alreadySavedToken = true;
+                    }
                   }
-                  tokenList.add(currentUser.FCMToken);
+
+                  /// 토큰 추가 안된 경우에만 추가해주기
+                  if(!alreadySavedToken) {
+                    tokenList = room.tokenList;
+                    tokenList.add(currentUser.FCMToken);
+                  } else {
+                    tokenList = room.tokenList;
+                  }
+
                   DatabaseService().addFcmToken(room, tokenList);
                   Get.to(() => MyRoomScreen(room: room,));
                 }

@@ -1,6 +1,6 @@
 class RoomModel {
   String id;
-  String roomType;
+  String themaType;
   String hintCount;
   int usedHintCount;
   int playTime;
@@ -12,7 +12,7 @@ class RoomModel {
 
   RoomModel(
       { required this.id,
-        required this.roomType,
+        required this.themaType,
         required this.hintCount,
         required this.usedHintCount,
         required this.playTime,
@@ -25,7 +25,7 @@ class RoomModel {
   factory RoomModel.fromMap(Map data) {
     return RoomModel(
       id: data['id'],
-      roomType: data['roomType'],
+      themaType: data['roomType'],
       hintCount: data['hintCount'],
       usedHintCount: data['usedHintCount'] ?? 0,
       playTime: data['playTime'],
@@ -40,7 +40,7 @@ class RoomModel {
   factory RoomModel.fromDS(String id, Map<String, dynamic> data) {
     return RoomModel(
       id: id,
-      roomType: data['roomType'],
+      themaType: data['roomType'],
       hintCount: data['hintCount'],
       usedHintCount: data['usedHintCount'] ?? 0,
       playTime: data['playTime'],
@@ -55,7 +55,7 @@ class RoomModel {
   Map<String, dynamic> toMap() {
     return {
       "id": id,
-      "roomType": roomType,
+      "roomType": themaType,
       "hintCount": hintCount,
       "usedHintCount": usedHintCount,
       "playTime": playTime,

@@ -28,6 +28,35 @@ class DatabaseService {
     return password;
   }
 
+  updateLastHintCode(String roomId, String hintCode) async {
+    try {
+      await roomReference.doc(roomId).update({
+        'lastHintCode': hintCode
+      });
+    } catch(e) {
+      return "roomID error";
+    }
+  }
+  // 마지막 확인한 힌트코드 가져오기
+  getLastHintCode(String roomId) async {
+    // DocumentSnapshot currentUser;
+    String lastHintCode = "";
+
+    try {
+      await roomReference
+          .doc(roomId)
+          .get()
+          .then((value) {
+        // currentUser = value;
+        lastHintCode = value.data()!["lastHintCode"];
+      });
+    } catch (e) {
+      return "roomID error";
+    }
+
+    return lastHintCode;
+  }
+
   /// 힌트 다시보기를 위한 목록 가져오기
   getHintHistoryList(String roomId) async {
     try {
@@ -92,7 +121,11 @@ class DatabaseService {
   }
 
   deleteRoom(RoomModel room) async {
-    return roomReference.doc(room.id).delete();
+    roomReference.doc(room.id).collection('Chats').get().then((snapshot) {
+      for (DocumentSnapshot ds in snapshot.docs) {
+        ds.reference.delete();
+      }
+    }).then((_) => roomReference.doc(room.id).delete());
   }
 
   Future<void> addUser(Map pUserMap, String userId) async {

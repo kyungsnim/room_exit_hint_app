@@ -28,7 +28,7 @@ class _ViewHintScreenState extends State<ViewHintScreen> {
 
   getHint() async {
     DatabaseService()
-        .viewHint(widget.hintCode, widget.room.roomType)
+        .viewHint(widget.hintCode, widget.room.themaType)
         .then((ds) {
       setState(() {
         hintMap = ds.data() as Map<String, dynamic>;
@@ -45,6 +45,7 @@ class _ViewHintScreenState extends State<ViewHintScreen> {
     }
     history.add(hintResult);
     DatabaseService().saveHintHistory(room.id, history);
+    DatabaseService().updateLastHintCode(room.id, hintCode);
     DatabaseService().useHintCountUp(room.id, ++room.usedHintCount);
   }
 
@@ -56,20 +57,11 @@ class _ViewHintScreenState extends State<ViewHintScreen> {
           child: Text('힌트 보기'),
         ),
       ),
-      body: Center(
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView(
-                children: [
-                  hintMap != null
-                  ? Text(hintMap![widget.hintCode], textAlign: TextAlign.center,)
-                  : loadingIndicator(),
-                ],
-              ),
-            )
-          ],
-        ),
+      body: Padding(
+        padding: EdgeInsets.all(16),
+        child: Text(hintMap![widget.hintCode], style: TextStyle(
+          fontSize: Get.width * 0.06,
+        )),
       ),
     );
   }

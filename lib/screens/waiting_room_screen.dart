@@ -14,6 +14,7 @@ import 'package:room_exit_hint_app/notification/notification_bloc.dart';
 import 'package:room_exit_hint_app/notification/notification_service.dart';
 import 'package:room_exit_hint_app/screens/my_room_screen.dart';
 import 'package:room_exit_hint_app/screens/setting_screen.dart';
+import 'package:room_exit_hint_app/widgets/loading_indicator.dart';
 import 'package:room_exit_hint_app/widgets/show_password_dialog.dart';
 
 import '../home_screen.dart';
@@ -120,7 +121,7 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
         stream: roomReference.snapshots(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (!snapshot.hasData) {
-            return Center(child: const Text('Loading events...'));
+            return loadingIndicator();
           }
           return GridView.builder(
             shrinkWrap: true,
@@ -155,7 +156,7 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
             : showPasswordDialog(context, pwdController, room);
       },
       child: Padding(
-        padding: const EdgeInsets.only(left: 4.0, right: 4, top: 4),
+        padding: const EdgeInsets.only(left: 4.0, right: 4, top: 4, bottom: 2),
         child: Stack(children: [
           Container(
               height: Get.height * 0.3,
@@ -175,7 +176,7 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     titleText('🌈 Room type'),
-                    contentText(room.roomType),
+                    contentText(room.themaType),
                     SizedBox(
                       height: Get.height * 0.015,
                     ),
@@ -212,14 +213,15 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                     child: Padding(
                       padding: const EdgeInsets.all(4.0),
                       child: Text(
-                          '${room.endTime.difference(DateTime.now()).inMinutes}분 ${room.endTime.difference(DateTime.now()).inSeconds % 60}초 남음',
+                          room.endTime.isAfter(DateTime.now()) ? '${room.endTime.difference(DateTime.now()).inMinutes}분 ${room.endTime.difference(DateTime.now()).inSeconds % 60}초 남음' :
+                          '${DateTime.now().difference(room.endTime).inMinutes}분 ${DateTime.now().difference(room.endTime).inSeconds % 60}초 지남',
                           style: TextStyle(
-                            color: room.isStarted ? Colors.black : Colors.white,
+                            color: room.isStarted ? room.endTime.isAfter(DateTime.now()) ? Colors.black : Colors.white : Colors.white,
                           )),
                     ),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: room.isStarted ? Colors.yellow : Colors.black),
+                        color: room.isStarted ? room.endTime.isAfter(DateTime.now()) ? Colors.yellow : Colors.red : Colors.black),
                   ))
               : SizedBox()
         ]),

@@ -1,3 +1,4 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:room_exit_hint_app/constants/constants.dart';
@@ -8,10 +9,8 @@ import 'package:room_exit_hint_app/screens/waiting_room_screen.dart';
 
 import '../home_screen.dart';
 
-showDeleteDialog(
-  BuildContext context,
-    RoomModel room,
-) async {
+showDeleteDialog(BuildContext context,
+    RoomModel room,) async {
   await showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -44,8 +43,30 @@ showDeleteDialog(
               style: ElevatedButton.styleFrom(primary: kPrimaryColor),
               onPressed: () {
                 DatabaseService().deleteRoom(room);
-                  Navigator.pop(context);
-                  Get.offAll(() => WaitingRoomScreen());
+                final DatabaseReference db =
+                FirebaseDatabase().reference();
+                switch(room.themaType) {
+                  case 'thema1': db
+                      .child(room.themaType).update({'hint': 'A00'});
+                  break;
+                  case 'thema2': db
+                      .child(room.themaType).update({'hint': 'B00'});
+                  break;
+                  case 'thema3': db
+                      .child(room.themaType).update({'hint': 'C00'});
+                  break;
+                  case 'thema4': db
+                      .child(room.themaType).update({'hint': 'D00'});
+                  break;
+                  case 'thema5': db
+                      .child(room.themaType).update({'hint': 'E00'});
+                  break;
+                  case 'thema6': db
+                      .child(room.themaType).update({'hint': 'F00'});
+                  break;
+                }
+                Navigator.pop(context);
+                Get.offAll(() => WaitingRoomScreen());
               },
             ),
             ElevatedButton(
