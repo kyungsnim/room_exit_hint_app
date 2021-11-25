@@ -90,7 +90,7 @@ class _MyRoomScreenState extends State<MyRoomScreen> {
           children: [
             HintScreen(room: widget.room),
             MessengerScreen(roomId: widget.room.id,),
-            RewindHintScreen(),
+            RewindHintScreen(roomId: widget.room.id,),
           ],
         )
             : Center(

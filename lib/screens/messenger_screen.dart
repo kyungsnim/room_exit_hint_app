@@ -26,7 +26,7 @@ class _MessengerScreenState extends State<MessengerScreen> {
   bool isMeReserveComplete = false; // 예약완료여부
   bool isFinalReserveReady = false;
   bool isFinalReserved = false;
-  List<String> tokenList = [];
+  List<dynamic> tokenList = [];
   List adminList = [];
 
   String? weekDay;
@@ -70,16 +70,22 @@ class _MessengerScreenState extends State<MessengerScreen> {
       // });
 
 
-      /// 토큰 어떻게 추가해줄지 고민해보자.
-      roomReference.doc(widget.roomId).get().then((ds) {
+      String to = '';
+      if(tokenList.length < 2) {
+        getTokenList();
+      }
 
-      });
-      List<String> tokenList = [currentUser.FCMToken];
+      for(int i = 0; i < tokenList.length; i++){
+        /// 내 토큰값이 아닌 경우 (상대에게 보내야할 토큰값이므로) to 에 할당해주기
+        if(currentUser.FCMToken != tokenList[i]) {
+          to = tokenList[i];
+        }
+      }
 
       /// push notification
       NotificationService()
           .sendMessage(
-          '${currentUser.name}님의 메시지', '${_message.text}', tokenList)
+          '${currentUser.name}님의 메시지', '${_message.text}', [to])
           .then((value) {
         print(value);
       });
@@ -90,66 +96,20 @@ class _MessengerScreenState extends State<MessengerScreen> {
     }
   }
 
-  // Future<void> getRoundingInfo() async {
-  //   await _firestore
-  //       .collection('Groups')
-  //       .doc(widget.roomId)
-  //       .get()
-  //       .then((value) {
-  //     setState(() {
-  //       roundingInfo = value.data();
-  //       isLoading = false;
-  //       reserveMembers = roundingInfo!['reserveMembers'];
-  //       leaderInfo = roundingInfo!['leader'];
-  //       isFinalReserved = roundingInfo!['isReserved'];
-  //     });
-  //
-  //     for (int i = 0; i < reserveMembers.length; i++) {
-  //       if (currentUser!.uid == reserveMembers[i]['uid']) {
-  //         // if (_auth.currentUser!.uid == reserveMembers[i]['uid']) {
-  //         setState(() {
-  //           isMeReserveComplete = true;
-  //         });
-  //       }
-  //     }
-  //
-  //     if (reserveMembers.length == roundingInfo!['player']) {
-  //       setState(() {
-  //         isFinalReserveReady = true;
-  //       });
-  //     }
-  //   });
-  // }
+  getTokenList() async {
+    /// 토큰 ㄱㅏ져오기 : 길이가 2이면 ok, 길이가 1이면 관리자만 있는 상태
+    roomReference.doc(widget.roomId).get().then((DocumentSnapshot ds) {
+      Map<String, dynamic> dsMap = ds.data() as Map<String, dynamic>;
+      tokenList = dsMap['tokenList'];
+    });
+  }
 
   @override
   void initState() {
-    print(widget.roomId);
-    super.initState();
-    // getRoundingInfo().then((_) {
-    //   switch (roundingInfo!['playDate'].toDate().weekday) {
-    //     case 7:
-    //       weekDay = '(일)';
-    //       break;
-    //     case 1:
-    //       weekDay = '(월)';
-    //       break;
-    //     case 2:
-    //       weekDay = '(화)';
-    //       break;
-    //     case 3:
-    //       weekDay = '(수)';
-    //       break;
-    //     case 4:
-    //       weekDay = '(목)';
-    //       break;
-    //     case 5:
-    //       weekDay = '(금)';
-    //       break;
-    //     case 6:
-    //       weekDay = '(토)';
-    //       break;
-    //   }
 
+    getTokenList();
+
+    super.initState();
     /// 무한 스크롤
     stream = newStream();
     _scrollController.addListener(() {
@@ -177,6 +137,7 @@ class _MessengerScreenState extends State<MessengerScreen> {
         onTap: () => FocusScope.of(context).requestFocus(
             FocusNode()),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
             /// 채팅 메시지 부분
             Flexible(
@@ -208,9 +169,10 @@ class _MessengerScreenState extends State<MessengerScreen> {
                     }),
               ),
             ),
+            SizedBox(height: 10),
             /// 메시지 입력 창
             Container(
-              height: Get.height * 0.06,
+              // height: Get.height * 0.06,
               decoration: BoxDecoration(
                 boxShadow: [
                   BoxShadow(
@@ -226,7 +188,7 @@ class _MessengerScreenState extends State<MessengerScreen> {
                   children: [
                     Expanded(
                       child: Container(
-                        height: size.height * 0.05,
+                        // height: size.height * 0.05,
                         width: size.width / 1.3,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(
@@ -236,6 +198,7 @@ class _MessengerScreenState extends State<MessengerScreen> {
                         child: TextField(
                           cursorColor: kPrimarySecondColor,
                           controller: _message,
+                          keyboardType: TextInputType.multiline,
                           decoration: InputDecoration(
                             hintText: '메시지 입력',
                             hintStyle: TextStyle(
@@ -392,197 +355,4 @@ class _MessengerScreenState extends State<MessengerScreen> {
       }
     });
   }
-
-  // roundingInfoText(
-  //     IconData iconData, String title, String content, bool reserveView) {
-  //   return Row(
-  //     children: [
-  //       Container(
-  //           decoration: BoxDecoration(
-  //               color: Colors.white,
-  //               borderRadius: BorderRadius.circular(50),
-  //               boxShadow: [
-  //                 BoxShadow(blurRadius: 1, color: kPrimarySecondColor)
-  //               ]),
-  //           width: Get.width * 0.08,
-  //           height: Get.width * 0.08,
-  //           child: Padding(
-  //             padding: const EdgeInsets.all(2.0),
-  //             child: Icon(
-  //               iconData,
-  //               size: Get.width * 0.06,
-  //               color: kPrimarySecondColor,
-  //             ),
-  //           )),
-  //       SizedBox(width: 10),
-  //       Expanded(
-  //         child: Container(
-  //           child: Text(
-  //             content,
-  //             style:
-  //             TextStyle(fontSize: Get.width * 0.04, color: Colors.black54),
-  //           ),
-  //         ),
-  //       ),
-  //       reserveView ? renderReserveMember() : SizedBox(),
-  //     ],
-  //   );
-  // }
-  //
-  // renderReserveMember() {
-  //   return Row(
-  //     children: [
-  //       renderMember(0),
-  //       reserveMembers.length == 2 ? renderMember(1) : SizedBox(),
-  //       reserveMembers.length == 3
-  //           ? Row(
-  //         children: [renderMember(1), renderMember(2)],
-  //       )
-  //           : SizedBox(),
-  //       reserveMembers.length == 4
-  //           ? Row(children: [renderMember(1), renderMember(2), renderMember(3)])
-  //           : SizedBox(),
-  //     ],
-  //   );
-  // }
-  //
-  // renderMember(int index) {
-  //   return Container(
-  //     width: Get.width * 0.07,
-  //     height: Get.width * 0.07,
-  //     decoration: BoxDecoration(
-  //       borderRadius: BorderRadius.circular(50),
-  //       border: Border.all(
-  //           width: 2,
-  //           color: reserveMembers[index]['sex'] == '남'
-  //               ? Colors.blueAccent
-  //               : Colors.pinkAccent),
-  //     ),
-  //     child: ClipRRect(
-  //       borderRadius: BorderRadius.circular(50),
-  //       child: CachedNetworkImage(
-  //         imageUrl: reserveMembers[index]['image'],
-  //       ),
-  //     ),
-  //   );
-  // }
-  //
-  // leaderInfoText(String content) {
-  //   return Row(
-  //     children: [
-  //       Container(
-  //         width: Get.width * 0.08,
-  //         height: Get.width * 0.08,
-  //         decoration: BoxDecoration(
-  //             color: Colors.white,
-  //             borderRadius: BorderRadius.circular(50),
-  //             boxShadow: [
-  //               BoxShadow(blurRadius: 1, color: kPrimarySecondColor)
-  //             ]),
-  //         child: ClipRRect(
-  //           borderRadius: BorderRadius.circular(50),
-  //           child: CachedNetworkImage(imageUrl: leaderInfo!['image']),
-  //         ),
-  //       ),
-  //       SizedBox(width: 10),
-  //       Expanded(
-  //         child: Container(
-  //           child: Text(
-  //             content,
-  //             style:
-  //             TextStyle(fontSize: Get.width * 0.04, color: Colors.black54),
-  //           ),
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
-  //
-  // Future getImage() async {
-  //   ImagePicker _picker = ImagePicker();
-  //
-  //   await _picker.pickImage(source: ImageSource.gallery).then((xFile) {
-  //     if (xFile != null) {
-  //       imageFile = File(xFile.path);
-  //       uploadImage();
-  //     }
-  //   });
-  // }
-  //
-  // Future uploadImage() async {
-  //   String fileName = Uuid().v1();
-  //   bool status = true;
-  //
-  //   setState(() {
-  //     isUploading = true;
-  //   });
-  //   await _firestore
-  //       .collection('Groups')
-  //       .doc(roundingInfo!['id'])
-  //       .collection('Chats')
-  //       .doc(fileName)
-  //       .set({
-  //     'sendBy': currentUser!.uid, //_auth.currentUser!.displayName,
-  //     'message': '',
-  //     'type': 'img',
-  //     'time': FieldValue.serverTimestamp(),
-  //   });
-  //
-  //   var ref =
-  //   FirebaseStorage.instance.ref().child('images').child('$fileName.jpg');
-  //
-  //   /// 에러가 있는 경우 firestore에 저장한 자료 삭제
-  //   var uploadTask = ref.putFile(imageFile!).catchError((onError) async {
-  //     await _firestore
-  //         .collection('Groups')
-  //         .doc(roundingInfo!['id'])
-  //         .collection('Chats')
-  //         .doc(fileName)
-  //         .delete();
-  //
-  //     status = false;
-  //   });
-  //
-  //   uploadTask.asStream().listen((TaskSnapshot snapshot) {
-  //     print('Task state: ${snapshot.state}');
-  //     print(
-  //         'Progress: ${(snapshot.bytesTransferred / snapshot.totalBytes) * 100} %');
-  //   }, onError: (e) {
-  //     // The final snapshot is also available on the task via `.snapshot`,
-  //     // this can include 2 additional states, `TaskState.error` & `TaskState.canceled`
-  //     // print(uploadTask.);
-  //
-  //     if (e.code == 'permission-denied') {
-  //       print('User does not have permission to upload to this reference.');
-  //     }
-  //   });
-  //
-  //   // We can still optionally use the Future alongside the stream.
-  //   try {
-  //     await uploadTask;
-  //     print('Upload complete.');
-  //   } on FirebaseException catch (e) {
-  //     if (e.code == 'permission-denied') {
-  //       print('User does not have permission to upload to this reference.');
-  //     }
-  //     // ...
-  //   }
-  //
-  //   if (status) {
-  //     String imageUrl = await ref.getDownloadURL();
-  //
-  //     await _firestore
-  //         .collection('Groups')
-  //         .doc(roundingInfo!['id'])
-  //         .collection('Chats')
-  //         .doc(fileName)
-  //         .update({'message': imageUrl});
-  //
-  //     // print(imageUrl);
-  //   }
-  //
-  //   setState(() {
-  //     isUploading = false;
-  //   });
-  // }
 }

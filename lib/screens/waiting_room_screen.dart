@@ -91,8 +91,9 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
               },
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Icon(
-                  Icons.settings,
+                child: Image.asset(
+                  'assets/icon/setting.png',
+                  width: 30,
                   color: Colors.white,
                 ),
               ),
@@ -173,18 +174,18 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    titleText('Room type'),
+                    titleText('🌈 Room type'),
                     contentText(room.roomType),
                     SizedBox(
                       height: Get.height * 0.015,
                     ),
-                    titleText('Hint count'),
-                    contentText(room.hintCount),
+                    titleText('🕰 Play time'),
+                    contentText('${room.playTime.toString()}분'),
                     SizedBox(
                       height: Get.height * 0.015,
                     ),
-                    titleText('Play time'),
-                    contentText('${room.playTime.toString()}분'),
+                    titleText('⭐ Hint count'),
+                    contentText(room.hintCount),
                   ],
                 ),
               )),

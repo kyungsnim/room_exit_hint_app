@@ -1,15 +1,47 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:room_exit_hint_app/db/database.dart';
+import 'package:room_exit_hint_app/widgets/loading_indicator.dart';
 
 class RewindHintScreen extends StatefulWidget {
-  const RewindHintScreen({Key? key}) : super(key: key);
+  final String roomId;
+  const RewindHintScreen({required this.roomId, Key? key}) : super(key: key);
 
   @override
   _RewindHintScreenState createState() => _RewindHintScreenState();
 }
 
 class _RewindHintScreenState extends State<RewindHintScreen> {
+
+  Map<String, dynamic>? currentRoomDataMap;
+  @override
+  void initState() {
+    FirebaseFirestore.instance
+        .collection("Rooms")
+        .doc(widget.roomId)
+        .get().then((value) {
+          setState(() {
+            currentRoomDataMap = value.data();
+          });
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container();
+    if(currentRoomDataMap == null) {
+      return loadingIndicator();
+    }
+    List hintHistoryList = currentRoomDataMap!['hintHistory'];
+    return ListView.builder(
+      itemCount: hintHistoryList.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          title: Text(
+            hintHistoryList[index]
+          ),
+        );
+      },
+    );
   }
 }

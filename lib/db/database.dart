@@ -28,6 +28,18 @@ class DatabaseService {
     return password;
   }
 
+  /// 힌트 다시보기를 위한 목록 가져오기
+  getHintHistoryList(String roomId) async {
+    try {
+      return await FirebaseFirestore.instance
+          .collection("Rooms")
+          .doc(roomId)
+          .get();
+    } catch (e) {
+      return "ID error";
+    }
+  }
+
   getUserInfo(String userId) async {
     return userReference.doc(userId).get();
   }
@@ -57,6 +69,12 @@ class DatabaseService {
 
   addFcmToken(RoomModel room, List<dynamic> tokenList) async {
     await roomReference.doc(room.id).update({
+      'tokenList': tokenList
+    });
+  }
+
+  setFcmToken(RoomModel room, List<dynamic> tokenList) async {
+    await roomReference.doc(room.id).set({
       'tokenList': tokenList
     });
   }

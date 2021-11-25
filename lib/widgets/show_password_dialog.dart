@@ -92,8 +92,9 @@ showPasswordDialog(
               ),
               style: ElevatedButton.styleFrom(primary: Colors.indigoAccent),
               onPressed: () {
-                DatabaseService().gameStart(room);
                 DatabaseService().addFcmToken(room, [currentUser.FCMToken]);
+                Future.delayed(const Duration(seconds: 2));
+                DatabaseService().gameStart(room);
                 Get.back();
               },
             ) : SizedBox(),

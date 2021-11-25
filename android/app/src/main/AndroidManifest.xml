@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.WAKE_L0OCK" />
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
    <application
-        android:label="room_exit_hint_app"
+        android:label="Room Escape"
         android:icon="@mipmap/launcher_icon"
        android:requestLegacyExternalStorage="true"
        android:usesCleartextTraffic="true">

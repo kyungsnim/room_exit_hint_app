@@ -29,10 +29,10 @@ class NotificationService {
 
   /// 채팅 메시지 알림
   Future<String?> sendMessage(
-      String title, String bodyMessage, List tokenList) async {
+      String title, String bodyMessage, List<String> token) async {
     String url = 'https://fcm.googleapis.com/fcm/send';
     var body = {
-      "registration_ids": tokenList,
+      "registration_ids": token,
       "notification": {
         "title": "$title",
         "body": "$bodyMessage",
