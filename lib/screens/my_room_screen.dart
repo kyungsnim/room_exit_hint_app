@@ -45,7 +45,8 @@ class _MyRoomScreenState extends State<MyRoomScreen> {
           title: Column(
             children: [
               customAppBarView('🌈', '테마 ${widget.room.themaType}'),
-              customAppBarView('🕰', '${widget.room.endTime.difference(DateTime.now()).inMinutes}분 ${widget.room.endTime.difference(DateTime.now()).inSeconds % 60}초 남음'),
+              customAppBarView('🕰', widget.room.endTime.isAfter(DateTime.now()) ? '${widget.room.endTime.difference(DateTime.now()).inMinutes}분 ${widget.room.endTime.difference(DateTime.now()).inSeconds % 60}초 남음' :
+              '${DateTime.now().difference(widget.room.endTime).inMinutes}분 ${DateTime.now().difference(widget.room.endTime).inSeconds % 60}초 지남'),
               customAppBarView('⭐️', "사용한 힌트 수 ${widget.room.usedHintCount}개 / 전체 힌트 수 ${widget.room.hintCount.toString()}개"),
             ],
           ),

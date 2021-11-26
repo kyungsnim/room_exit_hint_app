@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:provider/src/provider.dart';
 import 'package:room_exit_hint_app/constants/constants.dart';
+import 'package:room_exit_hint_app/db/database.dart';
 import 'package:room_exit_hint_app/models/current_user.dart';
 import 'package:room_exit_hint_app/models/room_model.dart';
 import 'package:room_exit_hint_app/notification/notification_bloc.dart';
@@ -45,6 +46,7 @@ class WaitingRoomScreen extends StatefulWidget {
 class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
   TextEditingController pwdController = TextEditingController();
   Timer? _timer;
+  List roomList = [];
 
   @override
   void initState() {
@@ -67,6 +69,12 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
       }
     });
 
+    DatabaseService().getAvailableRooms().then((value) {
+      setState(() {
+        roomList = value.docs;
+      });
+    });
+
     super.initState();
   }
 
@@ -82,6 +90,21 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
       onWillPop: () => showExitDialog(),
       child: Scaffold(
         appBar: AppBar(
+          leading: InkWell(
+            onTap: () => DatabaseService().getAvailableRooms().then((value) {
+              setState(() {
+                roomList = value.docs;
+              });
+            }),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Icon(
+                Icons.refresh,
+                size: 30,
+                color: Colors.white,
+              ),
+            ),
+          ),
           title: Text('대기실'),
           backgroundColor: kPrimaryColor,
           actions: [
@@ -117,27 +140,43 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
   }
 
   _buildRoomList() {
-    return StreamBuilder(
-        stream: roomReference.snapshots(),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (!snapshot.hasData) {
-            return loadingIndicator();
-          }
-          return GridView.builder(
-            shrinkWrap: true,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-            ),
-            itemCount: snapshot.data.docs.length,
-            itemBuilder: (context, index) {
-              // Map<String, dynamic> item = snapshot.data.docs[index].data() as Map<String, dynamic>;
-              RoomModel room = RoomModel.fromMap(
-                  snapshot.data.docs[index].data() as Map<String, dynamic>);
-              return _buildItem(room);
-            },
-          );
-        });
+    return GridView.builder(
+      shrinkWrap: true,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+      ),
+      itemCount: roomList.length,
+      itemBuilder: (context, index) {
+        // Map<String, dynamic> item = snapshot.data.docs[index].data() as Map<String, dynamic>;
+        RoomModel room = RoomModel.fromMap(
+            roomList[index].data() as Map<String, dynamic>);
+        return _buildItem(room);
+      },
+    );
   }
+
+  // _buildRoomList() {
+  //   return StreamBuilder(
+  //       stream: roomReference.snapshots(),
+  //       builder: (BuildContext context, AsyncSnapshot snapshot) {
+  //         if (!snapshot.hasData) {
+  //           return loadingIndicator();
+  //         }
+  //         return GridView.builder(
+  //           shrinkWrap: true,
+  //           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+  //             crossAxisCount: 2,
+  //           ),
+  //           itemCount: snapshot.data.docs.length,
+  //           itemBuilder: (context, index) {
+  //             // Map<String, dynamic> item = snapshot.data.docs[index].data() as Map<String, dynamic>;
+  //             RoomModel room = RoomModel.fromMap(
+  //                 snapshot.data.docs[index].data() as Map<String, dynamic>);
+  //             return _buildItem(room);
+  //           },
+  //         );
+  //       });
+  // }
 
   _buildItem(RoomModel room) {
     _timer = Timer.periodic(Duration(milliseconds: 10), (timer) {
@@ -150,10 +189,17 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
     return InkWell(
       onTap: () {
         _timer!.cancel();
+
         /// 게임중이고 관리자인 경우엔 바로 접속
         room.isStarted && currentUser.id == 'admin'
             ? Get.to(() => MyRoomScreen(room: room))
-            : showPasswordDialog(context, pwdController, room);
+            : showPasswordDialog(context, pwdController, room).then((_) {
+          DatabaseService().getAvailableRooms().then((value) {
+            setState(() {
+              roomList = value.docs;
+            });
+          });
+        });
       },
       child: Padding(
         padding: const EdgeInsets.only(left: 4.0, right: 4, top: 4, bottom: 2),
@@ -162,14 +208,15 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
               height: Get.height * 0.3,
               width: Get.height * 0.3,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    offset: Offset(0,0), blurRadius: 2, color: Colors.grey,
-                  )
-                ]
-              ),
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      offset: Offset(0, 0),
+                      blurRadius: 2,
+                      color: Colors.grey,
+                    )
+                  ]),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
@@ -213,15 +260,24 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                     child: Padding(
                       padding: const EdgeInsets.all(4.0),
                       child: Text(
-                          room.endTime.isAfter(DateTime.now()) ? '${room.endTime.difference(DateTime.now()).inMinutes}분 ${room.endTime.difference(DateTime.now()).inSeconds % 60}초 남음' :
-                          '${DateTime.now().difference(room.endTime).inMinutes}분 ${DateTime.now().difference(room.endTime).inSeconds % 60}초 지남',
+                          room.endTime.isAfter(DateTime.now())
+                              ? '${room.endTime.difference(DateTime.now()).inMinutes}분 ${room.endTime.difference(DateTime.now()).inSeconds % 60}초 남음'
+                              : '${DateTime.now().difference(room.endTime).inMinutes}분 ${DateTime.now().difference(room.endTime).inSeconds % 60}초 지남',
                           style: TextStyle(
-                            color: room.isStarted ? room.endTime.isAfter(DateTime.now()) ? Colors.black : Colors.white : Colors.white,
+                            color: room.isStarted
+                                ? room.endTime.isAfter(DateTime.now())
+                                    ? Colors.black
+                                    : Colors.white
+                                : Colors.white,
                           )),
                     ),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: room.isStarted ? room.endTime.isAfter(DateTime.now()) ? Colors.yellow : Colors.red : Colors.black),
+                        color: room.isStarted
+                            ? room.endTime.isAfter(DateTime.now())
+                                ? Colors.yellow
+                                : Colors.red
+                            : Colors.black),
                   ))
               : SizedBox()
         ]),
@@ -264,7 +320,8 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                 child: Container(
                   padding: const EdgeInsets.all(8),
                   child: Text('확인',
-                      style: TextStyle(fontFamily: 'Binggrae', fontSize: Get.width * 0.05)),
+                      style: TextStyle(
+                          fontFamily: 'Binggrae', fontSize: Get.width * 0.05)),
                 ),
                 style: ElevatedButton.styleFrom(primary: kPrimaryColor),
                 onPressed: () async {
@@ -276,8 +333,7 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                   padding: const EdgeInsets.all(8),
                   child: Text('취소',
                       style: TextStyle(
-                          fontFamily: 'Binggrae',
-                          fontSize: Get.width * 0.05)),
+                          fontFamily: 'Binggrae', fontSize: Get.width * 0.05)),
                 ),
                 style: ElevatedButton.styleFrom(primary: kPrimarySecondColor),
                 onPressed: () async {

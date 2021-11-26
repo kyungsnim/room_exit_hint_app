@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,6 +8,7 @@ import 'package:room_exit_hint_app/models/room_model.dart';
 import 'package:room_exit_hint_app/screens/view_hint_screen.dart';
 import 'package:room_exit_hint_app/screens/waiting_room_screen.dart';
 import 'package:room_exit_hint_app/widgets/show_delete_dialog.dart';
+import 'package:room_exit_hint_app/widgets/show_more_time_dialog.dart';
 
 class HintScreen extends StatefulWidget {
   RoomModel room;
@@ -19,6 +21,16 @@ class HintScreen extends StatefulWidget {
 
 class _HintScreenState extends State<HintScreen> {
   String hintCode = '';
+  TextEditingController timeController = TextEditingController();
+  RoomModel? room;
+
+  @override
+  void initState() {
+    setState(() {
+      room = widget.room;
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,13 +103,34 @@ class _HintScreenState extends State<HintScreen> {
         ),
       ),
       floatingActionButton: currentUser.id == 'admin'
-          ? FloatingActionButton(
-              onPressed: () {
-                showDeleteDialog(context, widget.room);
-              },
-              child: const Icon(Icons.delete),
-              backgroundColor: kPrimaryColor,
-            )
+          ? Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              FloatingActionButton(
+                onPressed: () {
+                  /// 시간 추가하는 부분 구현 중
+                  // showMoreTimeDialog(context, widget.room, timeController).then((_) async {
+                  //   DocumentSnapshot ds = await DatabaseService().getRoomInfo(room!.id);
+                  //
+                  //   // room 정보 업데이트
+                  //   setState(() {
+                  //     room = RoomModel.fromDS(room!.id, ds);
+                  //   });
+                  // });
+                },
+                child: const Icon(Icons.more_time),
+                backgroundColor: Colors.red,
+              ),
+              SizedBox(height: Get.height * 0.015),
+              FloatingActionButton(
+                  onPressed: () {
+                    showDeleteDialog(context, widget.room);
+                  },
+                  child: const Icon(Icons.delete),
+                  backgroundColor: kPrimaryColor,
+                ),
+            ],
+          )
           : SizedBox(),
     );
   }

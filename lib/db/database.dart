@@ -69,6 +69,10 @@ class DatabaseService {
     }
   }
 
+  getRoomInfo(String roomId) async {
+    return roomReference.doc(roomId).get();
+  }
+
   getUserInfo(String userId) async {
     return userReference.doc(userId).get();
   }
@@ -128,6 +132,16 @@ class DatabaseService {
     }).then((_) => roomReference.doc(room.id).delete());
   }
 
+  getAvailableRooms() async {
+    return await roomReference.get();
+  }
+
+  addPlayTime(RoomModel room, int moreTime) async {
+    await roomReference.doc(room.id).update({
+      'endTime': room.endTime.add(Duration(seconds: moreTime))
+    });
+  }
+
   Future<void> addUser(Map pUserMap, String userId) async {
     // random id 부여,
     Map<String, dynamic> userMap = {
@@ -148,66 +162,7 @@ class DatabaseService {
     });
   }
 
-  // 수험번호 검색 유저목록 가져오기
   getUserInfoList(userId) async {
-    return FirebaseFirestore.instance.collection("Users").doc(userId).get();
-  }
-
-  // 모든 학년 유저 목록 가져오기
-  getUserGradeList() async {
-    return await userReference.get();
-  }
-
-  // 중학교 2학년 유저 목록 가져오기
-  getJ2List() async {
-    return userReference.where('grade', isEqualTo: '중학교 2학년').get();
-  }
-
-  // 중학교 3학년 유저 목록 가져오기
-  getJ3List() async {
-    return userReference.where('grade', isEqualTo: '중학교 3학년').get();
-  }
-
-  // 고등학교 1학년 유저 목록 가져오기
-  getG1List() async {
-    return userReference.where('grade', isEqualTo: '고등학교 1학년').get();
-  }
-
-  // 고등학교 2학년 유저 목록 가져오기
-  getG2List() async {
-    return userReference.where('grade', isEqualTo: '고등학교 2학년').get();
-  }
-
-  // 고등학교 3학년 유저 목록 가져오기
-  getG3List() async {
-    return userReference.where('grade', isEqualTo: '고등학교 3학년').get();
-  }
-
-  // 승인안된 유저목록 가져오기
-  getUserInfoListByNotValidate() async {
-    return userReference
-        .where('validateByAdmin', isEqualTo: false)
-        .orderBy('grade')
-        .snapshots();
-  }
-
-  // 이름검색 유저목록 가져오기
-  getUserInfoListByUsername(name) async {
-    return FirebaseFirestore.instance
-        .collection("Users")
-        // .where('name', isEqualTo: name)
-        .orderBy('name')
-        .startAt([name.toString().trim()]).endAt(
-            [name.toString().trim() + '\uf8ff']).snapshots();
-  }
-
-  // 수험번호검색 유저목록 가져오기
-  getUserInfoListById(id) async {
-    return FirebaseFirestore.instance
-        .collection("Users")
-        // .where('phoneNumber', isEqualTo: phoneNumber)
-        .orderBy('id')
-        .startAt([id.toString().trim()]).endAt(
-            [id.toString().trim() + '\uf8ff']).snapshots();
+    return userReference.doc(userId).get();
   }
 }

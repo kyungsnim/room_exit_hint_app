@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class RoomModel {
   String id;
   String themaType;
@@ -37,7 +39,7 @@ class RoomModel {
     );
   }
 
-  factory RoomModel.fromDS(String id, Map<String, dynamic> data) {
+  factory RoomModel.fromDS(String id, DocumentSnapshot data) {
     return RoomModel(
       id: id,
       themaType: data['roomType'],

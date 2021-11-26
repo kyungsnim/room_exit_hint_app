@@ -57,7 +57,7 @@ class _ViewHintScreenState extends State<ViewHintScreen> {
           child: Text('힌트 보기'),
         ),
       ),
-      body: Padding(
+      body: hintMap == null ? loadingIndicator() : Padding(
         padding: EdgeInsets.all(16),
         child: Text(hintMap![widget.hintCode], style: TextStyle(
           fontSize: Get.width * 0.06,
