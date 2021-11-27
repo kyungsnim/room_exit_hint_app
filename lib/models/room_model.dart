@@ -27,7 +27,7 @@ class RoomModel {
   factory RoomModel.fromMap(Map data) {
     return RoomModel(
       id: data['id'],
-      themaType: data['roomType'],
+      themaType: data['themaType'] ?? '',
       hintCount: data['hintCount'],
       usedHintCount: data['usedHintCount'] ?? 0,
       playTime: data['playTime'],
@@ -42,7 +42,7 @@ class RoomModel {
   factory RoomModel.fromDS(String id, DocumentSnapshot data) {
     return RoomModel(
       id: id,
-      themaType: data['roomType'],
+      themaType: data['themaType'],
       hintCount: data['hintCount'],
       usedHintCount: data['usedHintCount'] ?? 0,
       playTime: data['playTime'],
@@ -57,7 +57,7 @@ class RoomModel {
   Map<String, dynamic> toMap() {
     return {
       "id": id,
-      "roomType": themaType,
+      "themaType": themaType,
       "hintCount": hintCount,
       "usedHintCount": usedHintCount,
       "playTime": playTime,

@@ -138,7 +138,7 @@ class DatabaseService {
 
   addPlayTime(RoomModel room, int moreTime) async {
     await roomReference.doc(room.id).update({
-      'endTime': room.endTime.add(Duration(seconds: moreTime))
+      'endTime': room.endTime.add(Duration(minutes: moreTime))
     });
   }
 
@@ -162,7 +162,11 @@ class DatabaseService {
     });
   }
 
-  getUserInfoList(userId) async {
-    return userReference.doc(userId).get();
+  getUserInfoList(String userId) async {
+    return await userReference.doc(userId).get();
+  }
+
+  getCurrentRoom(String roomId) async {
+    return await roomReference.doc(roomId).get();
   }
 }

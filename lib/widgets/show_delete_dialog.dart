@@ -9,8 +9,10 @@ import 'package:room_exit_hint_app/screens/waiting_room_screen.dart';
 
 import '../home_screen.dart';
 
-showDeleteDialog(BuildContext context,
-    RoomModel room,) async {
+showDeleteDialog(
+  BuildContext context,
+  RoomModel room,
+) async {
   await showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -43,28 +45,10 @@ showDeleteDialog(BuildContext context,
               style: ElevatedButton.styleFrom(primary: kPrimaryColor),
               onPressed: () {
                 DatabaseService().deleteRoom(room);
-                final DatabaseReference db =
-                FirebaseDatabase().reference();
-                switch(room.themaType) {
-                  case 'thema1': db
-                      .child(room.themaType).update({'hint': 'A00'});
-                  break;
-                  case 'thema2': db
-                      .child(room.themaType).update({'hint': 'B00'});
-                  break;
-                  case 'thema3': db
-                      .child(room.themaType).update({'hint': 'C00'});
-                  break;
-                  case 'thema4': db
-                      .child(room.themaType).update({'hint': 'D00'});
-                  break;
-                  case 'thema5': db
-                      .child(room.themaType).update({'hint': 'E00'});
-                  break;
-                  case 'thema6': db
-                      .child(room.themaType).update({'hint': 'F00'});
-                  break;
-                }
+
+                /// 방 삭제 후 Realtime Database thema의 hint A00으로 초기화
+                final DatabaseReference db = FirebaseDatabase().reference();
+                db.child(room.themaType).update({'hint': 'A00'});
                 Navigator.pop(context);
                 Get.offAll(() => WaitingRoomScreen());
               },

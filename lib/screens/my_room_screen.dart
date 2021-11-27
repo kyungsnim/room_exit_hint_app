@@ -1,15 +1,14 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:room_exit_hint_app/constants/constants.dart';
+import 'package:room_exit_hint_app/db/database.dart';
 import 'package:room_exit_hint_app/models/room_model.dart';
 import 'package:room_exit_hint_app/screens/hint_screen.dart';
 import 'package:room_exit_hint_app/screens/messenger_screen.dart';
 import 'package:room_exit_hint_app/screens/rewind_hint_screen.dart';
-import 'package:room_exit_hint_app/screens/setting_screen.dart';
-import 'package:room_exit_hint_app/screens/waiting_room_screen.dart';
-import 'package:room_exit_hint_app/widgets/show_delete_dialog.dart';
 
 class MyRoomScreen extends StatefulWidget {
   RoomModel room;
@@ -22,18 +21,36 @@ class MyRoomScreen extends StatefulWidget {
 
 class _MyRoomScreenState extends State<MyRoomScreen> {
   Timer? _timer;
+  RoomModel? room;
 
   @override
   void dispose() {
     _timer?.cancel();
     super.dispose();
   }
+
+  @override
+  void initState() {
+    super.initState();
+    room = widget.room;
+  }
+
+  getCurrentRoom() {
+    print('<<<<<< ${room!.id}');
+    DatabaseService().getCurrentRoom(room!.id).then((value) {
+      Map<String, dynamic> roomData = value.data() as Map<String, dynamic>;
+      setState(() {
+        room = RoomModel.fromMap(roomData);
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     _timer = Timer.periodic(const Duration(milliseconds: 10), (timer) {
       if(mounted) {
         setState(() {
-          widget.room.endTime.add(const Duration(seconds: 1));
+          room!.endTime.add(const Duration(seconds: 1));
         });
       }
     });
@@ -42,16 +59,32 @@ class _MyRoomScreenState extends State<MyRoomScreen> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.black54,
-          title: Column(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              customAppBarView('🌈', '테마 ${widget.room.themaType}'),
-              customAppBarView('🕰', widget.room.endTime.isAfter(DateTime.now()) ? '${widget.room.endTime.difference(DateTime.now()).inMinutes}분 ${widget.room.endTime.difference(DateTime.now()).inSeconds % 60}초 남음' :
-              '${DateTime.now().difference(widget.room.endTime).inMinutes}분 ${DateTime.now().difference(widget.room.endTime).inSeconds % 60}초 지남'),
-              customAppBarView('⭐️', "사용한 힌트 수 ${widget.room.usedHintCount}개 / 전체 힌트 수 ${widget.room.hintCount.toString()}개"),
+              Column(
+                children: [
+                  customAppBarView('🌈', '테마 ${room!.themaType}'),
+                  customAppBarView('🕰', room!.endTime.isAfter(DateTime.now()) ? '${room!.endTime.difference(DateTime.now()).inMinutes}분 ${room!.endTime.difference(DateTime.now()).inSeconds % 60}초 남음' :
+                  '${DateTime.now().difference(room!.endTime).inMinutes}분 ${DateTime.now().difference(room!.endTime).inSeconds % 60}초 지남'),
+                  customAppBarView('⭐️', "사용한 힌트 수 ${room!.usedHintCount}개 / 전체 힌트 수 ${room!.hintCount.toString()}개"),
+                ],
+              ),
+              InkWell(
+                onTap: () => getCurrentRoom(),
+                child: const Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Icon(
+                    Icons.refresh,
+                    size: 30,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
             ],
           ),
           toolbarHeight: Get.height * 0.1,
-          bottom: widget.room.isStarted
+          bottom: room!.isStarted
               ? TabBar(
             labelColor: Colors.white,
             indicatorColor: kPrimaryColor,
@@ -85,13 +118,13 @@ class _MyRoomScreenState extends State<MyRoomScreen> {
           // elevation: 0,
           centerTitle: true,
         ),
-        body: widget.room.isStarted
+        body: room!.isStarted
             ? TabBarView(
           physics: NeverScrollableScrollPhysics(),
           children: [
-            HintScreen(room: widget.room),
-            MessengerScreen(roomId: widget.room.id,),
-            RewindHintScreen(roomId: widget.room.id,),
+            HintScreen(room: room!),
+            MessengerScreen(roomId: room!.id,),
+            RewindHintScreen(roomId: room!.id,),
           ],
         )
             : Center(

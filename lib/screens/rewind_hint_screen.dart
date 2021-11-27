@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:room_exit_hint_app/constants/constants.dart';
 import 'package:room_exit_hint_app/db/database.dart';
 import 'package:room_exit_hint_app/widgets/loading_indicator.dart';
 
@@ -47,9 +48,20 @@ class _RewindHintScreenState extends State<RewindHintScreen> {
               hint: hintHistoryList[index],
             ),
           ),
-          child: ListTile(
-            title: Text(
-                hintHistoryList[index].toString().length >= 40 ? hintHistoryList[index].toString().substring(0, 40) : hintHistoryList[index].toString(),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ListTile(
+              tileColor: kPrimarySecondColor,
+              title: Text(
+                  hintHistoryList[index]['title']
+                  .toString().length >= 40 ? hintHistoryList[index]['title'].toString().substring(0, 40) : hintHistoryList[index]['title'].toString(),
+                style: TextStyle(color: Colors.white),
+              ),
+              subtitle: Text(
+                hintHistoryList[index]['content']
+                    .toString().length >= 40 ? hintHistoryList[index]['content'].toString().substring(0, 40) : hintHistoryList[index]['content'].toString(),
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ),
         );

@@ -322,7 +322,7 @@ class SignUpPageWithUserIdState extends State<SignUpPageWithUserId> {
                                       });
                                       FocusScope.of(context).requestFocus(
                                           FocusNode()); // 키보드 감추기
-                                      ds.getUserInfoList(userId).then((val) {
+                                      ds.getUserInfoList(userId!).then((val) {
                                         if (!val.exists) {
                                           if (_formKey.currentState!
                                               .validate()) {

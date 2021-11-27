@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:room_exit_hint_app/constants/constants.dart';
 import 'package:room_exit_hint_app/db/database.dart';
 import 'package:room_exit_hint_app/models/room_model.dart';
 import 'package:room_exit_hint_app/widgets/loading_indicator.dart';
@@ -34,16 +35,28 @@ class _ViewHintScreenState extends State<ViewHintScreen> {
         hintMap = ds.data() as Map<String, dynamic>;
       });
 
-      saveHint(widget.room, widget.hintCode, hintMap![widget.hintCode]);
+      saveHint(widget.room, widget.hintCode, hintMap!);
     });
   }
 
-  saveHint(RoomModel room, String hintCode, String hintResult) {
-    List<String> history = [];
-    for(int i = 0; i < room.hintHistory.length; i++) {
+  saveHint(RoomModel room, String hintCode, Map<String, dynamic> hintMap) {
+    // List<String> history = [];
+    // for (int i = 0; i < room.hintHistory.length; i++) {
+    //   history.add(room.hintHistory[i]);
+    // }
+    // history.add(hintResult);
+    List<dynamic> history = [];
+    for (int i = 0; i < room.hintHistory.length; i++) {
       history.add(room.hintHistory[i]);
     }
-    history.add(hintResult);
+    Map<String, dynamic> hint = {
+      'title': hintMap['${hintCode}_title'],
+      'content': hintMap['${hintCode}_content'],
+      'correct': hintMap['${hintCode}_correct'],
+      'createAt': DateTime.now()
+    };
+    history.add(hint);
+
     DatabaseService().saveHintHistory(room.id, history);
     DatabaseService().updateLastHintCode(room.id, hintCode);
     DatabaseService().useHintCountUp(room.id, ++room.usedHintCount);
@@ -57,12 +70,39 @@ class _ViewHintScreenState extends State<ViewHintScreen> {
           child: Text('힌트 보기'),
         ),
       ),
-      body: hintMap == null ? loadingIndicator() : Padding(
-        padding: EdgeInsets.all(16),
-        child: Text(hintMap![widget.hintCode], style: TextStyle(
-          fontSize: Get.width * 0.06,
-        )),
-      ),
+      body: hintMap == null
+          ? loadingIndicator()
+          : ListView(children: [
+              Padding(
+                padding: EdgeInsets.all(16),
+                child: Text(
+                  hintMap!['${widget.hintCode}_title'],
+                  style: TextStyle(
+                    fontSize: Get.width * 0.08,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Divider(),
+              Padding(
+                padding: EdgeInsets.all(16),
+                child: Text(
+                  hintMap!['${widget.hintCode}_content'],
+                  style: TextStyle(
+                    fontSize: Get.width * 0.05,
+                  ),
+                ),
+              ),
+              Divider(),
+              Padding(
+                padding: EdgeInsets.all(16),
+                child: Text(
+                  hintMap!['${widget.hintCode}_correct'],
+                  style: TextStyle(
+                      fontSize: Get.width * 0.06, color: kPrimaryColor),
+                ),
+              ),
+            ]),
     );
   }
 

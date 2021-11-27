@@ -13,7 +13,7 @@ class MakeRoomScreen extends StatefulWidget {
 }
 
 class _MakeRoomScreenState extends State<MakeRoomScreen> {
-  String roomType = 'thema1';
+  String themaType = 'thema1';
   List<String> roomTypeList = [
     'thema1',
     'thema2',
@@ -102,7 +102,7 @@ class _MakeRoomScreenState extends State<MakeRoomScreen> {
               children: [
                 Spacer(),
                 DropdownButton(
-                    value: roomType,
+                    value: themaType,
                     style: TextStyle(
                       fontSize: Get.height * 0.02,
                       color: Colors.black,
@@ -123,7 +123,7 @@ class _MakeRoomScreenState extends State<MakeRoomScreen> {
                     }).toList(),
                     onChanged: (value) {
                       setState(() {
-                        roomType = value! as String;
+                        themaType = value! as String;
                       });
                     }),
                 Spacer(), //SizedBox(width: 20),
@@ -306,6 +306,7 @@ class _MakeRoomScreenState extends State<MakeRoomScreen> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: TextField(
+                  keyboardType: TextInputType.number,
                   cursorColor: kPrimaryColor,
                   controller: controller,
                   decoration: const InputDecoration(
@@ -342,7 +343,7 @@ class _MakeRoomScreenState extends State<MakeRoomScreen> {
 
           Map<String, dynamic> roomMap = {
             'id': roomId,
-            'roomType': roomType,
+            'themaType': themaType,
             'hintCount': hintCountController.text,
             'playTime': int.parse(playTimeController.text),
             'password': passwordController.text,

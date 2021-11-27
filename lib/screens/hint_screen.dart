@@ -98,40 +98,91 @@ class _HintScreenState extends State<HintScreen> {
                 ),
                 textAlign: TextAlign.center,
               ),
+              currentUser.id == 'admin'
+                  ? SizedBox(
+                      height: Get.height * 0.05,
+                    )
+                  : SizedBox(),
+              currentUser.id == 'admin'
+                  ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.indigoAccent,
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.all(16),
+                            child: InkWell(
+                              onTap: () {
+                                showMoreTimeDialog(
+                                    context, widget.room, timeController);
+                              },
+                              child: Icon(
+                                Icons.more_time,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: Get.width * 0.03),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: kPrimaryColor,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.all(16),
+                            child: InkWell(
+                              onTap: () {
+                                showDeleteDialog(context, widget.room);
+                              },
+                              child: Icon(
+                                Icons.delete,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  : SizedBox()
             ],
           ),
         ),
       ),
-      floatingActionButton: currentUser.id == 'admin'
-          ? Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              FloatingActionButton(
-                onPressed: () {
-                  /// 시간 추가하는 부분 구현 중
-                  // showMoreTimeDialog(context, widget.room, timeController).then((_) async {
-                  //   DocumentSnapshot ds = await DatabaseService().getRoomInfo(room!.id);
-                  //
-                  //   // room 정보 업데이트
-                  //   setState(() {
-                  //     room = RoomModel.fromDS(room!.id, ds);
-                  //   });
-                  // });
-                },
-                child: const Icon(Icons.more_time),
-                backgroundColor: Colors.red,
-              ),
-              SizedBox(height: Get.height * 0.015),
-              FloatingActionButton(
-                  onPressed: () {
-                    showDeleteDialog(context, widget.room);
-                  },
-                  child: const Icon(Icons.delete),
-                  backgroundColor: kPrimaryColor,
-                ),
-            ],
-          )
-          : SizedBox(),
+      // floatingActionButton: currentUser.id == 'admin'
+      //     ? Column(
+      //         mainAxisAlignment: MainAxisAlignment.end,
+      //         children: [
+      //           FloatingActionButton(
+      //             onPressed: () {
+      //               /// 시간 추가하는 부분 구현 중
+      //               showMoreTimeDialog(context, widget.room, timeController)
+      //                   .then((_) async {
+      //                 // DocumentSnapshot ds = await DatabaseService().getRoomInfo(room!.id);
+      //
+      //                 // room 정보 업데이트
+      //                 // setState(() {
+      //                 //   room = RoomModel.fromDS(room!.id, ds);
+      //                 // });
+      //               });
+      //             },
+      //             child: const Icon(Icons.more_time),
+      //             backgroundColor: Colors.red,
+      //           ),
+      //           SizedBox(height: Get.height * 0.015),
+      //           FloatingActionButton(
+      //             onPressed: () {
+      //               showDeleteDialog(context, widget.room);
+      //             },
+      //             child: const Icon(Icons.delete),
+      //             backgroundColor: kPrimaryColor,
+      //           ),
+      //         ],
+      //       )
+      //     : SizedBox(),
     );
   }
 }
