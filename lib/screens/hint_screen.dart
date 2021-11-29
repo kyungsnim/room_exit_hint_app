@@ -23,6 +23,7 @@ class _HintScreenState extends State<HintScreen> {
   String hintCode = '';
   TextEditingController timeController = TextEditingController();
   RoomModel? room;
+  TextEditingController pwdController = TextEditingController();
 
   @override
   void initState() {
@@ -53,31 +54,7 @@ class _HintScreenState extends State<HintScreen> {
                           widget.room.hintCount) {
                         Get.snackbar('힌트 보기 불가', '더 이상 힌트 사용이 불가능합니다.');
                       } else {
-                        /// 사용자만 힌트 보기 가능
-                        final DatabaseReference db =
-                            FirebaseDatabase().reference();
-                        db
-                            .child(widget.room.themaType)
-                            .once()
-                            .then((DataSnapshot result) async {
-                          setState(() {
-                            hintCode = result.value['hint'];
-                          });
-                          print('result = ${result.value['hint']}');
-
-                          String lastHintCode = await DatabaseService()
-                              .getLastHintCode(widget.room.id);
-
-                          /// 힌트 보기 눌렀을 때 새로운 힌트를 보는 것이 아닌 경우
-                          if (hintCode == lastHintCode) {
-                            Get.snackbar('힌트 보기 불가', '새로운 힌트가 없습니다.',
-                                colorText: Colors.white,
-                                backgroundColor: kPrimaryColor);
-                          } else {
-                            Get.to(() => ViewHintScreen(
-                                hintCode: hintCode, room: widget.room));
-                          }
-                        });
+                        showPasswordForHintDialog(context, pwdController,room!);
                       }
                     },
                     child: Text('힌트 보기',
@@ -184,5 +161,147 @@ class _HintScreenState extends State<HintScreen> {
       //       )
       //     : SizedBox(),
     );
+  }
+
+  showPasswordForHintDialog(
+      BuildContext context,
+      TextEditingController pwdController,
+      RoomModel room,
+      ) async {
+    await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('비밀번호 입력', // '게시글 수정/삭제하기'
+                style: TextStyle(
+                  fontFamily: 'Pretendard',
+                  fontSize: Get.width * 0.05,
+                )),
+            content: Container(
+              width: Get.width * 0.3,
+              height: Get.height * 0.1,
+              child: Column(children: [
+                Text(
+                  '힌트보기를 위해 비밀번호를 입력하세요.',
+                  // '해당 게시글을 수정/삭제하시려면 비밀번호 입력 후 버튼을 눌러주세요.'
+                  style: TextStyle(
+                    fontFamily: 'Pretendard',
+                    fontSize: Get.width * 0.03,
+                  ),
+                ),
+                Spacer(),
+                Row(
+                  children: [
+                    Text(
+                      '비밀번호',
+                      style: TextStyle(
+                        fontFamily: 'Pretendard',
+                        fontSize: Get.width * 0.03,
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Expanded(
+                      child: TextField(
+                        obscureText: true,
+                        enableSuggestions: false,
+                        autocorrect: false,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          hintText: '비밀번호를 입력하세요.',
+                          hintStyle: TextStyle(
+                            fontFamily: 'Pretendard',
+                            fontSize: Get.width * 0.03,
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: kPrimaryColor,
+                            ),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: kPrimaryColor,
+                            ),
+                          ),
+                          border: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: kPrimaryColor,
+                            ),
+                          ),
+                        ),
+                        controller: pwdController,
+                        cursorColor: kPrimaryColor,
+                      ),
+                    ),
+                  ],
+                ),
+                Spacer(),
+              ]),
+            ),
+            actions: [
+              ElevatedButton(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Text('힌트보기',
+                      style: TextStyle(
+                          fontFamily: 'Pretendard', fontSize: Get.width * 0.05)),
+                ),
+                style: ElevatedButton.styleFrom(primary: kPrimaryColor),
+                onPressed: () {
+                  if (pwdController.text != room.password) {
+                    Get.snackbar(
+                      '비밀번호 오류',
+                      '비밀번호가 맞지 않습니다.',
+                      colorText: Colors.white,
+                      backgroundColor: kPrimaryColor,
+                    );
+                  } else {
+                    pwdController.text = '';
+                    Navigator.pop(context);
+
+                    /// 사용자만 힌트 보기 가능
+                    final DatabaseReference db =
+                    FirebaseDatabase().reference();
+                    db
+                        .child(widget.room.themaType)
+                        .once()
+                        .then((DataSnapshot result) async {
+                      setState(() {
+                        hintCode = result.value['hint'];
+                      });
+                      print('result = ${result.value['hint']}');
+
+                      String lastHintCode = await DatabaseService()
+                          .getLastHintCode(widget.room.id);
+
+                      /// 힌트 보기 눌렀을 때 새로운 힌트를 보는 것이 아닌 경우
+                      if (hintCode == lastHintCode) {
+                        Get.snackbar('힌트 보기 불가', '새로운 힌트가 없습니다.',
+                            colorText: Colors.white,
+                            backgroundColor: kPrimaryColor);
+                      } else {
+                        Get.to(() => ViewHintScreen(
+                            hintCode: hintCode, room: widget.room));
+                      }
+                    });
+                  }
+                },
+              ),
+              ElevatedButton(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Text('취소',
+                      style: TextStyle(
+                        fontFamily: 'Pretendard',
+                        fontSize: Get.width * 0.05,
+                      )),
+                ),
+                style: ElevatedButton.styleFrom(primary: Colors.grey),
+                onPressed: () async {
+                  Get.back();
+                },
+              ),
+            ],
+          );
+        });
   }
 }

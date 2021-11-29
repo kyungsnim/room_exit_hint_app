@@ -47,10 +47,10 @@ class _MyRoomScreenState extends State<MyRoomScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _timer = Timer.periodic(const Duration(milliseconds: 10), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
       if(mounted) {
         setState(() {
-          room!.endTime.add(const Duration(seconds: 1));
+          room!.endTime.add(const Duration(seconds: 10));
         });
       }
     });

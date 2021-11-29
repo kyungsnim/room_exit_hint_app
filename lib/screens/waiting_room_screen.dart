@@ -179,10 +179,10 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
   // }
 
   _buildItem(RoomModel room) {
-    _timer = Timer.periodic(Duration(milliseconds: 10), (timer) {
-      if (mounted) {
+    _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
+      if(mounted) {
         setState(() {
-          room.endTime.add(Duration(seconds: 1));
+          room.endTime.add(const Duration(seconds: 10));
         });
       }
     });

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -81,6 +82,7 @@ class _ViewHintScreenState extends State<ViewHintScreen> {
                     fontSize: Get.width * 0.08,
                     fontWeight: FontWeight.bold,
                   ),
+                  textAlign: TextAlign.center,
                 ),
               ),
               Divider(),
@@ -94,13 +96,25 @@ class _ViewHintScreenState extends State<ViewHintScreen> {
                 ),
               ),
               Divider(),
+              SizedBox(height: Get.height * 0.5),
+              Text(
+                '아래로 내려주세요.',
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: Get.height * 0.5),
+              Divider(),
               Padding(
                 padding: EdgeInsets.all(16),
-                child: Text(
-                  hintMap!['${widget.hintCode}_correct'],
-                  style: TextStyle(
-                      fontSize: Get.width * 0.06, color: kPrimaryColor),
-                ),
+                child: hintMap!['${widget.hintCode}_type'] == 'text'
+                    ? Text(
+                        hintMap!['${widget.hintCode}_correct'],
+                        style: TextStyle(
+                            fontSize: Get.width * 0.06, color: kPrimaryColor),
+                        textAlign: TextAlign.center,
+                      )
+                    : CachedNetworkImage(
+                        imageUrl: hintMap!['${widget.hintCode}_correct'],
+                      ),
               ),
             ]),
     );
