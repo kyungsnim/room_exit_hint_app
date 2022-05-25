@@ -41,8 +41,9 @@ class _MakeRoomScreenState extends State<MakeRoomScreen> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text('방 만들기'),
-        backgroundColor: kPrimaryColor,
+        backgroundColor: Colors.black,
       ),
+      backgroundColor: Colors.black,
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Column(
@@ -84,7 +85,7 @@ class _MakeRoomScreenState extends State<MakeRoomScreen> {
                   '테마 (Theme Type)',
                   style: TextStyle(
                       fontFamily: 'Nanum',
-                      color: Colors.black87,
+                      color: Colors.white,
                       fontSize: Get.height * 0.025,
                       fontWeight: FontWeight.bold),
                 ),
@@ -94,7 +95,7 @@ class _MakeRoomScreenState extends State<MakeRoomScreen> {
           SizedBox(height: 3),
           Container(
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.black38, width: 2),
+              border: Border.all(color: Colors.grey, width: 2),
               borderRadius: BorderRadius.circular(10),
               color: Colors.grey.withOpacity(0.1),
             ),
@@ -105,7 +106,7 @@ class _MakeRoomScreenState extends State<MakeRoomScreen> {
                     value: themaType,
                     style: TextStyle(
                       fontSize: Get.height * 0.02,
-                      color: Colors.black,
+                      color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
                     borderRadius: BorderRadius.circular(10),
@@ -135,143 +136,6 @@ class _MakeRoomScreenState extends State<MakeRoomScreen> {
     );
   }
 
-  //
-  // inputHintCount() {
-  //   return /// 힌트 수 선택
-  //     Padding(
-  //       padding: const EdgeInsets.symmetric(
-  //           horizontal: 8.0, vertical: 8.0),
-  //       child: Column(
-  //         children: [
-  //           Row(
-  //             mainAxisAlignment: MainAxisAlignment.start,
-  //             children: [
-  //               Container(
-  //                 child: Text(
-  //                   '제공 힌트 수 (Hint Count)',
-  //                   style: TextStyle(
-  //                       fontFamily: 'Nanum',
-  //                       color: Colors.black87,
-  //                       fontSize: Get.height * 0.025,
-  //                       fontWeight: FontWeight.bold),
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //           SizedBox(height: 3),
-  //           Container(
-  //             decoration: BoxDecoration(
-  //               border: Border.all(
-  //                   color: Colors.black38, width: 2),
-  //               borderRadius: BorderRadius.circular(10),
-  //               color: Colors.grey.withOpacity(0.1),
-  //             ),
-  //             child: Row(
-  //               children: [
-  //                 Spacer(),
-  //                 DropdownButton(
-  //                     value: hintCount,
-  //                     style: TextStyle(
-  //                       fontSize: Get.height * 0.02,
-  //                       color: Colors.black,
-  //                       fontWeight: FontWeight.bold,
-  //                     ),
-  //                     borderRadius:
-  //                     BorderRadius.circular(10),
-  //                     underline: Container(
-  //                       height: 0,
-  //                     ),
-  //                     items: hintCountList.map((value) {
-  //                       return DropdownMenuItem(
-  //                         value: value,
-  //                         child: Text(value.toString(),
-  //                             style: const TextStyle(
-  //                               fontFamily: 'Binggrae',
-  //                             )),
-  //                       );
-  //                     }).toList(),
-  //                     onChanged: (value) {
-  //                       setState(() {
-  //                         hintCount = value! as String;
-  //                       });
-  //                     }),
-  //                 Spacer(), //SizedBox(width: 20),
-  //               ],
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //     );
-  // }
-  //
-  // inputPlayTime() {
-  //   return /// 플레이 시간 선택
-  //     Padding(
-  //       padding: const EdgeInsets.symmetric(
-  //           horizontal: 8.0, vertical: 8.0),
-  //       child: Column(
-  //         children: [
-  //           Row(
-  //             mainAxisAlignment: MainAxisAlignment.start,
-  //             children: [
-  //               Container(
-  //                 child: Text(
-  //                   '게임 시간 (Play Time)',
-  //                   style: TextStyle(
-  //                       fontFamily: 'Nanum',
-  //                       color: Colors.black87,
-  //                       fontSize: Get.height * 0.025,
-  //                       fontWeight: FontWeight.bold),
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //           SizedBox(height: 3),
-  //           Container(
-  //             decoration: BoxDecoration(
-  //               border: Border.all(
-  //                   color: Colors.black38, width: 2),
-  //               borderRadius: BorderRadius.circular(10),
-  //               color: Colors.grey.withOpacity(0.1),
-  //             ),
-  //             child: Row(
-  //               children: [
-  //                 Spacer(),
-  //                 DropdownButton(
-  //                     value: playTime,
-  //                     style: TextStyle(
-  //                       fontSize: Get.height * 0.02,
-  //                       color: Colors.black,
-  //                       fontWeight: FontWeight.bold,
-  //                     ),
-  //                     borderRadius:
-  //                     BorderRadius.circular(10),
-  //                     underline: Container(
-  //                       height: 0,
-  //                     ),
-  //                     items: playTimeList.map((value) {
-  //                       return DropdownMenuItem(
-  //                         value: value,
-  //                         child: Text(value.toString(),
-  //                             style: const TextStyle(
-  //                               fontFamily: 'Binggrae',
-  //                             )),
-  //                       );
-  //                     }).toList(),
-  //                     onChanged: (value) {
-  //                       setState(() {
-  //                         playTime = value! as int;
-  //                       });
-  //                     }),
-  //                 Spacer(), //SizedBox(width: 20),
-  //               ],
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //     );
-  // }
-
   inputArea(String title, TextEditingController controller, bool secure) {
     return
 
@@ -288,7 +152,7 @@ class _MakeRoomScreenState extends State<MakeRoomScreen> {
                   title,
                   style: TextStyle(
                       fontFamily: 'Nanum',
-                      color: Colors.black87,
+                      color: Colors.white,
                       fontSize: Get.height * 0.025,
                       fontWeight: FontWeight.bold),
                 ),
@@ -299,15 +163,16 @@ class _MakeRoomScreenState extends State<MakeRoomScreen> {
           Container(
               width: Get.width,
               decoration: BoxDecoration(
-                border: Border.all(color: Colors.black38, width: 2),
+                border: Border.all(color: Colors.grey, width: 2),
                 borderRadius: BorderRadius.circular(10),
                 color: Colors.grey.withOpacity(0.1),
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: TextField(
+                  style: TextStyle(color: Colors.white),
                   keyboardType: TextInputType.number,
-                  cursorColor: kPrimaryColor,
+                  cursorColor: Colors.white,
                   controller: controller,
                   decoration: const InputDecoration(
                     border: UnderlineInputBorder(borderSide: BorderSide.none),
@@ -336,10 +201,7 @@ class _MakeRoomScreenState extends State<MakeRoomScreen> {
       onTap: () {
         /// 힌트수와 게임시간 숫자일 때만 방 만들어지도록 변경해야 함
         if (hintCountController.text.isNum && playTimeController.text.isNum) {
-          String roomId = DateTime
-              .now()
-              .microsecondsSinceEpoch
-              .toString();
+          String roomId = DateTime.now().microsecondsSinceEpoch.toString();
 
           Map<String, dynamic> roomMap = {
             'id': roomId,
@@ -368,7 +230,7 @@ class _MakeRoomScreenState extends State<MakeRoomScreen> {
           height: Get.height * 0.08,
           width: Get.width,
           decoration: BoxDecoration(
-            color: kPrimaryColor,
+            color: Colors.grey,
             borderRadius: BorderRadius.circular(8),
           ),
           child: Center(

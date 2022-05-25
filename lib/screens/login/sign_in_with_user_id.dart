@@ -147,10 +147,8 @@ class SignInPageWithUserIdState extends State<SignInPageWithUserId> {
     return Scaffold(
       key: _scaffoldKey,
       resizeToAvoidBottomInset: false,
+      backgroundColor: Colors.black,
       body: Stack(children: [
-        ClipRRect(
-            child: Container(color: Colors.blue.withOpacity(0.2),)
-        ),
         Container(
           color: Colors.black.withOpacity(0.2),
           width: MediaQuery.of(context).size.width * 1,
@@ -189,7 +187,7 @@ class SignInPageWithUserIdState extends State<SignInPageWithUserId> {
                           child: TextFormField(
                             // keyboardType: TextInputType.number,
                             controller: _userIdController,
-                            cursorColor: Colors.blue,
+                            cursorColor: Colors.grey,
                             validator: (val) {
                               if (val!.isEmpty) {
                                 return '아이디를 입력하세요';
@@ -200,7 +198,7 @@ class SignInPageWithUserIdState extends State<SignInPageWithUserId> {
                             decoration: const InputDecoration(
                                 border: InputBorder.none,
                                 icon: Icon(Icons.perm_contact_cal,
-                                    color: Colors.blue),
+                                    color: Colors.grey),
                                 hintText: '아이디',
                                 hintStyle:
                                 TextStyle(fontSize: 18)),
@@ -231,7 +229,7 @@ class SignInPageWithUserIdState extends State<SignInPageWithUserId> {
                           child: TextFormField(
                             controller: _passwordController,
                             obscureText: true,
-                            cursorColor: Colors.blue,
+                            cursorColor: Colors.grey,
                             validator: (val) {
                               if (val!.isEmpty) {
                                 return '비밀번호를 입력하세요';
@@ -239,7 +237,7 @@ class SignInPageWithUserIdState extends State<SignInPageWithUserId> {
                             },
                             decoration: const InputDecoration(
                                 border: InputBorder.none,
-                                icon: Icon(Icons.vpn_key, color: Colors.blue),
+                                icon: Icon(Icons.vpn_key, color: Colors.grey),
                                 hintText: '비밀번호',
                                 hintStyle:
                                 TextStyle(fontSize: 18)),
@@ -260,7 +258,8 @@ class SignInPageWithUserIdState extends State<SignInPageWithUserId> {
                                 data: ThemeData(
                                     unselectedWidgetColor: Colors.white),
                                 child: Checkbox(
-                                  activeColor: Colors.blue,
+                                  activeColor: Colors.white,
+                                  checkColor: Colors.black,
                                   value: doRemember,
                                   onChanged: (newValue) {
                                     setState(() {
@@ -282,7 +281,7 @@ class SignInPageWithUserIdState extends State<SignInPageWithUserId> {
                         children: [
                           const CircularProgressIndicator(
                             valueColor: AlwaysStoppedAnimation<Color>(
-                                Colors.blueAccent),
+                                Colors.grey),
                             strokeWidth: 10,
                           ),
                           SizedBox(
@@ -305,8 +304,8 @@ class SignInPageWithUserIdState extends State<SignInPageWithUserId> {
                                 context,
                                 '로그인',
                                 Colors.white,
-                                Colors.blue.withOpacity(0.7),
-                                Colors.blue),
+                                Colors.grey.withOpacity(0.7),
+                                Colors.grey),
                           ),
                           const SizedBox(
                             height: 10,
@@ -326,7 +325,7 @@ class SignInPageWithUserIdState extends State<SignInPageWithUserId> {
                                 context,
                                 '회원가입',
                                 Colors.black,
-                                Colors.white.withOpacity(0.7),
+                                Colors.white,
                                 Colors.white),
                           ),
                         ],

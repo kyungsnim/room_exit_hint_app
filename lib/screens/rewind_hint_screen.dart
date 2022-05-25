@@ -51,7 +51,7 @@ class _RewindHintScreenState extends State<RewindHintScreen> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: ListTile(
-              tileColor: kPrimarySecondColor,
+              tileColor: Colors.grey,
               title: Text(
                   hintHistoryList[index]['title']
                   .toString().length >= 40 ? hintHistoryList[index]['title'].toString().substring(0, 40) : hintHistoryList[index]['title'].toString(),

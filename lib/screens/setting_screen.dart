@@ -17,6 +17,7 @@ class _SettingScreenState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
         body: Center(
             child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -31,6 +32,9 @@ class _SettingScreenState extends State<SettingScreen> {
               () => SignInPageWithUserId(),
             );
           },
+          style: ElevatedButton.styleFrom(
+            primary: Colors.grey,
+          ),
           child: Text('로그아웃'),
         )
       ],

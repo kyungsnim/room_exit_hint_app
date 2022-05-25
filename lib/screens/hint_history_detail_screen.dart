@@ -21,6 +21,7 @@ class _HintHistoryDetailScreenState extends State<HintHistoryDetailScreen> {
         title: Text('힌트 다시보기'),
         backgroundColor: kPrimarySecondColor,
       ),
+      backgroundColor: Colors.black,
       body: ListView(children: [
         Padding(
           padding: EdgeInsets.all(16),
@@ -29,6 +30,7 @@ class _HintHistoryDetailScreenState extends State<HintHistoryDetailScreen> {
             style: TextStyle(
               fontSize: Get.width * 0.08,
               fontWeight: FontWeight.bold,
+              color: Colors.white,
             ),
             textAlign: TextAlign.center,
           ),
@@ -40,6 +42,7 @@ class _HintHistoryDetailScreenState extends State<HintHistoryDetailScreen> {
             widget.hint['content'],
             style: TextStyle(
               fontSize: Get.width * 0.05,
+              color: Colors.white,
             ),
           ),
         ),
@@ -48,6 +51,9 @@ class _HintHistoryDetailScreenState extends State<HintHistoryDetailScreen> {
         Text(
           '아래로 내려주세요.',
           textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.white,
+          )
         ),
         SizedBox(height: Get.height * 0.5),
         Divider(),
@@ -55,7 +61,7 @@ class _HintHistoryDetailScreenState extends State<HintHistoryDetailScreen> {
           padding: EdgeInsets.all(16),
           child: widget.hint['type'] == 'text' ? Text(
             widget.hint['correct'],
-            style: TextStyle(fontSize: Get.width * 0.06, color: kPrimaryColor),
+            style: TextStyle(fontSize: Get.width * 0.06, color: Colors.white,),
             textAlign: TextAlign.center,
           ) : CachedNetworkImage(imageUrl: widget.hint['correct']),
         ),

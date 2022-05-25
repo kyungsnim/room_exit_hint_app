@@ -49,8 +49,11 @@ showDeleteDialog(
                 /// 방 삭제 후 Realtime Database thema의 hint A00으로 초기화
                 final DatabaseReference db = FirebaseDatabase().reference();
                 db.child(room.themaType).update({'hint': 'A00'});
-                Navigator.pop(context);
-                Get.offAll(() => WaitingRoomScreen());
+                Get.snackbar('삭제 중', '잠시만 기다려주세요.', colorText: Colors.white);
+                Future.delayed(Duration(milliseconds: 1500)).then((_) {
+                  Navigator.pop(context);
+                  Get.offAll(() => WaitingRoomScreen());
+                });
               },
             ),
             ElevatedButton(

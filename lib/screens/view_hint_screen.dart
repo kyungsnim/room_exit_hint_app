@@ -51,6 +51,7 @@ class _ViewHintScreenState extends State<ViewHintScreen> {
       history.add(room.hintHistory[i]);
     }
     Map<String, dynamic> hint = {
+      'type': hintMap['${hintCode}_type'],
       'title': hintMap['${hintCode}_title'],
       'content': hintMap['${hintCode}_content'],
       'correct': hintMap['${hintCode}_correct'],
@@ -71,6 +72,7 @@ class _ViewHintScreenState extends State<ViewHintScreen> {
           child: Text('힌트 보기'),
         ),
       ),
+      backgroundColor: Colors.black,
       body: hintMap == null
           ? loadingIndicator()
           : ListView(children: [
@@ -81,6 +83,7 @@ class _ViewHintScreenState extends State<ViewHintScreen> {
                   style: TextStyle(
                     fontSize: Get.width * 0.08,
                     fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -92,6 +95,7 @@ class _ViewHintScreenState extends State<ViewHintScreen> {
                   hintMap!['${widget.hintCode}_content'],
                   style: TextStyle(
                     fontSize: Get.width * 0.05,
+                    color: Colors.white,
                   ),
                 ),
               ),
@@ -100,6 +104,9 @@ class _ViewHintScreenState extends State<ViewHintScreen> {
               Text(
                 '아래로 내려주세요.',
                 textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white,
+                )
               ),
               SizedBox(height: Get.height * 0.5),
               Divider(),
@@ -109,7 +116,7 @@ class _ViewHintScreenState extends State<ViewHintScreen> {
                     ? Text(
                         hintMap!['${widget.hintCode}_correct'],
                         style: TextStyle(
-                            fontSize: Get.width * 0.06, color: kPrimaryColor),
+                            fontSize: Get.width * 0.06, color: Colors.white,),
                         textAlign: TextAlign.center,
                       )
                     : CachedNetworkImage(

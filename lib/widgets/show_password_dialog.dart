@@ -50,6 +50,7 @@ showPasswordDialog(
                       obscureText: true,
                       enableSuggestions: false,
                       autocorrect: false,
+                      autofocus: true,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         hintText: '비밀번호를 입력하세요.',
@@ -136,7 +137,7 @@ showPasswordDialog(
                   }
 
                   DatabaseService().addFcmToken(room, tokenList);
-                  Get.to(() => MyRoomScreen(room: room,));
+                  Get.offAll(() => MyRoomScreen(room: room,));
                 }
               },
             ),

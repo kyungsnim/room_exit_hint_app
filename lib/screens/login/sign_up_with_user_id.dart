@@ -69,9 +69,10 @@ class SignUpPageWithUserIdState extends State<SignUpPageWithUserId> {
     return Scaffold(
         key: _scaffoldKey,
         resizeToAvoidBottomInset: false,
+        backgroundColor: Colors.black,
         body: Stack(children: [
           ClipRRect(
-            child: Container(color: Colors.green.withOpacity(0.2),)
+            child: Container(color: Colors.grey.withOpacity(0.2),)
           ),
           Container(
             color: Colors.black.withOpacity(0.6),
@@ -111,7 +112,7 @@ class SignUpPageWithUserIdState extends State<SignUpPageWithUserId> {
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
                                   border: Border.all(
-                                      color: Colors.green.withOpacity(0.5)),
+                                      color: Colors.grey.withOpacity(0.5)),
                                   borderRadius: BorderRadius.circular(10),
                                   color: Colors.white,
                                   boxShadow: const [
@@ -127,7 +128,7 @@ class SignUpPageWithUserIdState extends State<SignUpPageWithUserId> {
                                     const EdgeInsets.symmetric(horizontal: 10),
                                 child: TextFormField(
                                   controller: _userIdController,
-                                  cursorColor: Colors.green,
+                                  cursorColor: Colors.grey,
                                   validator: (val) {
                                     if (val!.isEmpty) {
                                       setState(() {
@@ -141,7 +142,7 @@ class SignUpPageWithUserIdState extends State<SignUpPageWithUserId> {
                                   decoration: const InputDecoration(
                                       border: InputBorder.none,
                                       icon: Icon(Icons.perm_contact_cal,
-                                          color: Colors.green),
+                                          color: Colors.grey),
                                       hintText: '아이디',
                                       hintStyle:
                                           TextStyle(fontSize: 18)),
@@ -156,7 +157,7 @@ class SignUpPageWithUserIdState extends State<SignUpPageWithUserId> {
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
                                   border: Border.all(
-                                      color: Colors.green.withOpacity(0.5)),
+                                      color: Colors.grey.withOpacity(0.5)),
                                   borderRadius: BorderRadius.circular(10),
                                   color: Colors.white,
                                   boxShadow: const [
@@ -172,13 +173,13 @@ class SignUpPageWithUserIdState extends State<SignUpPageWithUserId> {
                                     const EdgeInsets.symmetric(horizontal: 10),
                                 child: Row(
                                   children: [
-                                    const Icon(Icons.person, color: Colors.green),
+                                    const Icon(Icons.person, color: Colors.grey),
                                     const SizedBox(width: 15),
                                     Expanded(
                                       flex: 1,
                                       child: TextFormField(
                                         controller: _nameController,
-                                        cursorColor: Colors.green,
+                                        cursorColor: Colors.grey,
                                         validator: (val) {
                                           if (!Platform.isIOS && val!.isEmpty) {
                                             return '이름을 입력하세요';
@@ -205,7 +206,7 @@ class SignUpPageWithUserIdState extends State<SignUpPageWithUserId> {
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
                                   border: Border.all(
-                                      color: Colors.green.withOpacity(0.5)),
+                                      color: Colors.grey.withOpacity(0.5)),
                                   borderRadius: BorderRadius.circular(10),
                                   color: Colors.white,
                                   boxShadow: const [
@@ -222,7 +223,7 @@ class SignUpPageWithUserIdState extends State<SignUpPageWithUserId> {
                                 child: TextFormField(
                                   controller: _passwordController,
                                   obscureText: true,
-                                  cursorColor: Colors.green,
+                                  cursorColor: Colors.grey,
                                   validator: (val) {
                                     if (val!.length < 4) {
                                       setState(() {
@@ -236,7 +237,7 @@ class SignUpPageWithUserIdState extends State<SignUpPageWithUserId> {
                                   decoration: const InputDecoration(
                                       border: InputBorder.none,
                                       icon: Icon(Icons.vpn_key,
-                                          color: Colors.green),
+                                          color: Colors.grey),
                                       hintText: '비밀번호',
                                       hintStyle:
                                           TextStyle(fontSize: 18)),
@@ -251,7 +252,7 @@ class SignUpPageWithUserIdState extends State<SignUpPageWithUserId> {
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
                                   border: Border.all(
-                                      color: Colors.green.withOpacity(0.5)),
+                                      color: Colors.grey.withOpacity(0.5)),
                                   borderRadius: BorderRadius.circular(10),
                                   color: Colors.white,
                                   boxShadow: const [
@@ -268,7 +269,7 @@ class SignUpPageWithUserIdState extends State<SignUpPageWithUserId> {
                                 child: TextFormField(
                                   controller: _confirmPasswordController,
                                   obscureText: true,
-                                  cursorColor: Colors.green,
+                                  cursorColor: Colors.grey,
                                   validator: (val) {
                                     setState(() {
                                       isLoading = false;
@@ -285,7 +286,7 @@ class SignUpPageWithUserIdState extends State<SignUpPageWithUserId> {
                                   decoration: const InputDecoration(
                                       border: InputBorder.none,
                                       icon: Icon(Icons.vpn_key_outlined,
-                                          color: Colors.green),
+                                          color: Colors.grey),
                                       hintText: '비밀번호 확인',
                                       hintStyle:
                                           TextStyle(fontSize: 18)),
@@ -338,8 +339,8 @@ class SignUpPageWithUserIdState extends State<SignUpPageWithUserId> {
                                         context,
                                         '회원 가입',
                                         Colors.white,
-                                        Colors.green.withOpacity(0.7),
-                                        Colors.green)),
+                                        Colors.grey.withOpacity(0.7),
+                                        Colors.grey)),
                                 const SizedBox(height: 10),
                                 InkWell(
                                     onTap: () {
@@ -349,7 +350,7 @@ class SignUpPageWithUserIdState extends State<SignUpPageWithUserId> {
                                         context,
                                         '돌아가기',
                                         Colors.black,
-                                        Colors.white.withOpacity(0.7),
+                                        Colors.white,
                                         Colors.white)),
                               ],
                             ),

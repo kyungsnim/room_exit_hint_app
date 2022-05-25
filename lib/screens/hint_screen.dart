@@ -36,6 +36,7 @@ class _HintScreenState extends State<HintScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       body: Container(
         child: Center(
           child: Column(
@@ -62,7 +63,7 @@ class _HintScreenState extends State<HintScreen> {
                           fontSize: Get.width * 0.05,
                         )),
                     style: ElevatedButton.styleFrom(
-                      primary: kPrimaryColor,
+                      primary: Colors.grey,
                     )),
               ),
               SizedBox(
@@ -71,7 +72,7 @@ class _HintScreenState extends State<HintScreen> {
               Text(
                 '현재 풀고 있는 문제의 힌트를 보여줍니다.\n힌트 사용시 사용한 힌트 1개가 추가됩니다.',
                 style: TextStyle(
-                  color: Colors.black87,
+                  color: Colors.white,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -87,7 +88,7 @@ class _HintScreenState extends State<HintScreen> {
                         Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
-                            color: Colors.indigoAccent,
+                            color: Colors.grey,
                           ),
                           child: Padding(
                             padding: EdgeInsets.all(16),
@@ -106,7 +107,7 @@ class _HintScreenState extends State<HintScreen> {
                         SizedBox(width: Get.width * 0.03),
                         Container(
                           decoration: BoxDecoration(
-                            color: kPrimaryColor,
+                            color: Colors.grey,
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Padding(
@@ -205,6 +206,7 @@ class _HintScreenState extends State<HintScreen> {
                         obscureText: true,
                         enableSuggestions: false,
                         autocorrect: false,
+                        autofocus: true,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           hintText: '비밀번호를 입력하세요.',

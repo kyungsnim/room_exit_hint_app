@@ -91,11 +91,16 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
       child: Scaffold(
         appBar: AppBar(
           leading: InkWell(
-            onTap: () => DatabaseService().getAvailableRooms().then((value) {
-              setState(() {
-                roomList = value.docs;
-              });
-            }),
+            onTap: () {
+              if(_timer != null) {
+                _timer?.cancel();
+              }
+              DatabaseService().getAvailableRooms().then((value) {
+            setState(() {
+              roomList = value.docs;
+            });
+          });
+        },
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Icon(
@@ -106,7 +111,7 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
             ),
           ),
           title: Text('대기실'),
-          backgroundColor: kPrimaryColor,
+          backgroundColor: Colors.black,
           actions: [
             InkWell(
               onTap: () {
@@ -125,6 +130,7 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
           ],
         ),
         body: _buildRoomList(),
+        backgroundColor: Colors.black,
         floatingActionButton: currentUser.id == 'admin'
             ? FloatingActionButton(
                 onPressed: () {
@@ -132,7 +138,7 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                   Get.to(() => MakeRoomScreen());
                 },
                 child: Icon(Icons.add),
-                backgroundColor: kPrimaryColor,
+                backgroundColor: Colors.grey,
               )
             : SizedBox(),
       ),
@@ -154,29 +160,6 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
       },
     );
   }
-
-  // _buildRoomList() {
-  //   return StreamBuilder(
-  //       stream: roomReference.snapshots(),
-  //       builder: (BuildContext context, AsyncSnapshot snapshot) {
-  //         if (!snapshot.hasData) {
-  //           return loadingIndicator();
-  //         }
-  //         return GridView.builder(
-  //           shrinkWrap: true,
-  //           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-  //             crossAxisCount: 2,
-  //           ),
-  //           itemCount: snapshot.data.docs.length,
-  //           itemBuilder: (context, index) {
-  //             // Map<String, dynamic> item = snapshot.data.docs[index].data() as Map<String, dynamic>;
-  //             RoomModel room = RoomModel.fromMap(
-  //                 snapshot.data.docs[index].data() as Map<String, dynamic>);
-  //             return _buildItem(room);
-  //           },
-  //         );
-  //       });
-  // }
 
   _buildItem(RoomModel room) {
     _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
@@ -209,7 +192,11 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
               width: Get.height * 0.3,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  color: Colors.white,
+                  color: Colors.black,
+                  border: Border.all(
+                    color: Colors.grey,
+                    width: 2,
+                  ),
                   boxShadow: [
                     BoxShadow(
                       offset: Offset(0, 0),
@@ -221,19 +208,20 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     titleText('🌈 Room type'),
                     contentText(room.themaType),
-                    SizedBox(
+                    currentUser.id != 'admin' ? SizedBox() : SizedBox(
                       height: Get.height * 0.015,
                     ),
-                    titleText('🕰 Play time'),
-                    contentText('${room.playTime.toString()}분'),
-                    SizedBox(
+                    currentUser.id != 'admin' ? SizedBox() : titleText('🕰 Play time'),
+                    currentUser.id != 'admin' ? SizedBox() : contentText('${room.playTime.toString()}분'),
+                    currentUser.id != 'admin' ? SizedBox() : SizedBox(
                       height: Get.height * 0.015,
                     ),
-                    titleText('⭐ Hint count'),
-                    contentText(room.hintCount),
+                    currentUser.id != 'admin' ? SizedBox() : titleText('⭐ Hint count'),
+                    currentUser.id != 'admin' ? SizedBox() : contentText(room.hintCount),
                   ],
                 ),
               )),
@@ -264,11 +252,7 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                               ? '${room.endTime.difference(DateTime.now()).inMinutes}분 ${room.endTime.difference(DateTime.now()).inSeconds % 60}초 남음'
                               : '${DateTime.now().difference(room.endTime).inMinutes}분 ${DateTime.now().difference(room.endTime).inSeconds % 60}초 지남',
                           style: TextStyle(
-                            color: room.isStarted
-                                ? room.endTime.isAfter(DateTime.now())
-                                    ? Colors.black
-                                    : Colors.white
-                                : Colors.white,
+                            color: Colors.black,
                           )),
                     ),
                     decoration: BoxDecoration(
@@ -277,7 +261,7 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                             ? room.endTime.isAfter(DateTime.now())
                                 ? Colors.yellow
                                 : Colors.red
-                            : Colors.black),
+                            : Colors.white),
                   ))
               : SizedBox()
         ]),
@@ -288,7 +272,7 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
   titleText(String title) {
     return Text(
       title,
-      style: TextStyle(color: Colors.black87, fontSize: Get.width * 0.04),
+      style: TextStyle(color: Colors.white, fontSize: currentUser.id != 'admin' ? Get.width * 0.05 : Get.width * 0.04),
     );
   }
 
@@ -296,8 +280,8 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
     return Text(
       content,
       style: TextStyle(
-          color: Colors.black87,
-          fontSize: Get.width * 0.045,
+          color: Colors.white,
+          fontSize: currentUser.id != 'admin' ? Get.width * 0.06 : Get.width * 0.045,
           fontWeight: FontWeight.bold),
     );
   }

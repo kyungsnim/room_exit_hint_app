@@ -137,6 +137,7 @@ class _MessengerScreenState extends State<MessengerScreen> {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      backgroundColor: Colors.black,
       body: GestureDetector(
         onTap: () => FocusScope.of(context).requestFocus(
             FocusNode()),
@@ -184,7 +185,7 @@ class _MessengerScreenState extends State<MessengerScreen> {
                       blurRadius: 3,
                       color: kPrimaryColor),
                 ],
-                color: Colors.white,
+                color: Colors.black,
               ),
               child: Padding(
                 padding: const EdgeInsets.all(4.0),
@@ -200,9 +201,10 @@ class _MessengerScreenState extends State<MessengerScreen> {
                           ),
                         ),
                         child: TextField(
-                          cursorColor: kPrimarySecondColor,
+                          cursorColor: Colors.white,
                           controller: _message,
                           keyboardType: TextInputType.multiline,
+                          style: TextStyle(color: Colors.white),
                           decoration: InputDecoration(
                             hintText: '메시지 입력',
                             hintStyle: TextStyle(
@@ -211,17 +213,17 @@ class _MessengerScreenState extends State<MessengerScreen> {
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20),
                               borderSide: BorderSide(
-                                  width: 2, color: kPrimarySecondColor),
+                                  width: 2, color: Colors.white),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20),
                               borderSide: BorderSide(
-                                  color: kPrimarySecondColor, width: 2.0),
+                                  color: Colors.white, width: 2.0),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20),
                               borderSide: BorderSide(
-                                  color: kPrimarySecondColor, width: 2.0),
+                                  color: Colors.white, width: 2.0),
                             ),
                           ),
                         ),
@@ -230,7 +232,7 @@ class _MessengerScreenState extends State<MessengerScreen> {
                     IconButton(
                         icon: Icon(
                           Icons.send,
-                          color: kPrimarySecondColor,
+                          color: Colors.white,
                         ),
                         onPressed: () {
                           onSendMessage();
@@ -285,7 +287,7 @@ class _MessengerScreenState extends State<MessengerScreen> {
                           .toDate()
                           .toString()
                           .substring(11, 16),
-                  style: TextStyle(fontSize: 10, color: Colors.black54),
+                  style: TextStyle(fontSize: 10, color: Colors.white),
                   textAlign: TextAlign.end,
                 )
                     : Text(''),
@@ -308,7 +310,7 @@ class _MessengerScreenState extends State<MessengerScreen> {
                         : EdgeInsets.only(right: 8, left: 8),
                     child: Text(
                       chatMap['message'],
-                      style: TextStyle(color: Colors.black87),
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ),
@@ -326,7 +328,7 @@ class _MessengerScreenState extends State<MessengerScreen> {
                           .toDate()
                           .toString()
                           .substring(11, 16),
-                  style: TextStyle(fontSize: 10, color: Colors.black54),
+                  style: TextStyle(fontSize: 10, color: Colors.white),
                   textAlign: TextAlign.start,
                 ),
               ],
@@ -344,7 +346,7 @@ class _MessengerScreenState extends State<MessengerScreen> {
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
-              color: Colors.black54,
+              color: Colors.grey,
             ),
             padding: EdgeInsets.symmetric(
               vertical: size.height / 50,
