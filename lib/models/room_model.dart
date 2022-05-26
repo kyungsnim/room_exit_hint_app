@@ -9,6 +9,7 @@ class RoomModel {
   DateTime endTime;
   String password;
   bool isStarted;
+  String user;
   List<dynamic> hintHistory;
   List<dynamic> tokenList;
 
@@ -21,6 +22,7 @@ class RoomModel {
         required this.endTime,
       required this.password,
       required this.isStarted,
+        required this.user,
       required this.hintHistory,
       required this.tokenList});
 
@@ -35,6 +37,7 @@ class RoomModel {
       password: data['password'],
       isStarted: data['isStarted'] ?? false,
       hintHistory: data['hintHistory'] ?? [],
+      user: data['user'] ?? '',
       tokenList: data['tokenList'] ?? [],
     );
   }
@@ -50,6 +53,7 @@ class RoomModel {
       password: data['password'],
       isStarted: data['isStarted'] ?? false,
       hintHistory: data['hintHistory'] ?? [],
+      user: data['user'] ?? '',
       tokenList: data['tokenList'] ?? [],
     );
   }
@@ -64,6 +68,7 @@ class RoomModel {
       "endTime": endTime,
       "isStarted": isStarted,
       "hintHistory": hintHistory,
+      "user": user,
       "tokenList": tokenList,
     };
   }

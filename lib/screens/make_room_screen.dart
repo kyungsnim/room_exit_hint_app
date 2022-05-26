@@ -103,6 +103,7 @@ class _MakeRoomScreenState extends State<MakeRoomScreen> {
               children: [
                 Spacer(),
                 DropdownButton(
+                  dropdownColor: Colors.grey,
                     value: themaType,
                     style: TextStyle(
                       fontSize: Get.height * 0.02,
@@ -115,10 +116,12 @@ class _MakeRoomScreenState extends State<MakeRoomScreen> {
                     ),
                     items: roomTypeList.map((value) {
                       return DropdownMenuItem(
+
                         value: value,
                         child: Text(value.toString(),
                             style: const TextStyle(
                               fontFamily: 'Binggrae',
+                              color: Colors.white
                             )),
                       );
                     }).toList(),

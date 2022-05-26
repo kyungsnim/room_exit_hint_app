@@ -96,7 +96,12 @@ class _MyRoomScreenState extends State<MyRoomScreen> {
               // isScrollable: true,
               unselectedLabelColor: Colors.white,
               physics: NeverScrollableScrollPhysics(),
-              tabs: [
+              onTap: (index) {
+                if(index != 1) {
+                  FocusManager.instance.primaryFocus?.unfocus();
+                }
+              },
+              tabs: const [
                 Tab(
                   child: Text(
                     '힌트',

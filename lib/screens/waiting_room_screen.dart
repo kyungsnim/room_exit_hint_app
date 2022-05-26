@@ -150,6 +150,7 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
       shrinkWrap: true,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
+        childAspectRatio: 3/4,
       ),
       itemCount: roomList.length,
       itemBuilder: (context, index) {
@@ -188,7 +189,7 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
         padding: const EdgeInsets.only(left: 4.0, right: 4, top: 4, bottom: 2),
         child: Stack(children: [
           Container(
-              height: Get.height * 0.3,
+              height: Get.height * 0.5,
               width: Get.height * 0.3,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
@@ -222,6 +223,11 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                     ),
                     currentUser.id != 'admin' ? SizedBox() : titleText('⭐ Hint count'),
                     currentUser.id != 'admin' ? SizedBox() : contentText(room.hintCount),
+                    currentUser.id != 'admin' ? SizedBox() : SizedBox(
+                      height: Get.height * 0.015,
+                    ),
+                    currentUser.id != 'admin' ? SizedBox() : titleText('🙎‍️ User'),
+                    currentUser.id != 'admin' ? SizedBox() : contentText(room.user),
                   ],
                 ),
               )),
