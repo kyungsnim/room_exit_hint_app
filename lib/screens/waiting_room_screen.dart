@@ -176,7 +176,7 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
 
         /// 게임중이고 관리자인 경우엔 바로 접속
         room.isStarted && currentUser.id == 'admin'
-            ? Get.to(() => MyRoomScreen(room: room))
+            ? goToRoom(room)
             : showPasswordDialog(context, pwdController, room).then((_) {
           DatabaseService().getAvailableRooms().then((value) {
             setState(() {
@@ -275,6 +275,10 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
     );
   }
 
+  goToRoom(RoomModel room) {
+    // DatabaseService().addFcmToken(room, [currentUser.FCMToken]);
+    Get.to(() => MyRoomScreen(room: room));
+  }
   titleText(String title) {
     return Text(
       title,
