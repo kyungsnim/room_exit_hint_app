@@ -100,9 +100,50 @@ class DatabaseService {
     });
   }
 
-  addFcmToken(RoomModel room, List<dynamic> tokenList) async {
-    await roomReference.doc(room.id).update({
-      'tokenList': tokenList
+  addUserId(String roomId, String userId) async {
+    await roomReference.doc(roomId).update({
+      'user': userId
+    });
+  }
+
+  addFcmToken(String roomId, List<dynamic> tokenList) async {
+    List<dynamic> beforeTokenList = [];
+    roomReference.doc(roomId).get().then((DocumentSnapshot value) {
+      Map<String, dynamic> map = value.data() as Map<String, dynamic>;
+      beforeTokenList = map['tokenList'];
+
+      for(int i = 0; i < beforeTokenList.length; i++) {
+        if (tokenList[0] == beforeTokenList[i]) {
+          beforeTokenList.removeAt(i);
+        }
+      }
+
+      beforeTokenList.add(tokenList[0]);
+
+      /// admin이 게임시작 먼저 한 경우
+      /// admin token 쌓임
+      /// 이후에 user 들어오면 token 2개 ok
+      ///
+      /// user가 먼저 방에 들어간 경우
+      /// user token 쌓임
+      /// 이후에 게임시작버튼 admin이 누른 경우 admin token 쌓임 ok
+      ///
+      /// issue : user가 먼저 들어간 후에 메신저 남기면 관리자에게 안감
+      /// 방 만들때 admin token 쌓아줘야 할지 고민 필요
+      /// admin이 방에 들어갈 때 user 토큰 안지워지도록 해야 함
+      ///
+      /// 1. admin 방 생성 후 바로 입장 > user1 입장
+      /// 2. admin 방 생성 > user1 입장 > admin 입장
+      /// 3. admin 방 생성 > user1 입장 > admin 입장 없이 메시지
+      ///
+      print(beforeTokenList);
+      try {
+        roomReference.doc(roomId).update({
+          'tokenList': beforeTokenList
+        });
+      } catch(e) {
+        print(e);
+      }
     });
   }
 

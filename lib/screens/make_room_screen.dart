@@ -5,6 +5,8 @@ import 'package:room_exit_hint_app/db/database.dart';
 import 'package:room_exit_hint_app/home_screen.dart';
 import 'package:room_exit_hint_app/screens/waiting_room_screen.dart';
 
+import '../models/room_model.dart';
+
 class MakeRoomScreen extends StatefulWidget {
   const MakeRoomScreen({Key? key}) : super(key: key);
 
@@ -218,8 +220,9 @@ class _MakeRoomScreenState extends State<MakeRoomScreen> {
             'endTime': DateTime.now(),
           };
 
-          DatabaseService().addRoom(roomMap).then((_) {
+          DatabaseService().addRoom(roomMap).then((_) async {
             FocusScope.of(context).unfocus();
+            await DatabaseService().addFcmToken(roomId, [currentUser.FCMToken]);
             Get.offAll(() => WaitingRoomScreen());
             Get.snackbar('방만들기', '방 만들기 완료', colorText: Colors.white);
           });

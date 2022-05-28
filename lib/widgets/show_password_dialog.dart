@@ -93,7 +93,7 @@ showPasswordDialog(
               ),
               style: ElevatedButton.styleFrom(primary: Colors.indigoAccent),
               onPressed: () {
-                DatabaseService().addFcmToken(room, [currentUser.FCMToken]);
+                DatabaseService().addFcmToken(room.id, [currentUser.FCMToken]);
                 Future.delayed(const Duration(seconds: 2));
                 DatabaseService().gameStart(room);
                 Get.back();
@@ -119,24 +119,24 @@ showPasswordDialog(
                   pwdController.text = '';
                   Navigator.pop(context);
 
-                  /// 사용자 입장시 사용자의 토큰값 저장
-                  List<dynamic>? tokenList;
-                  bool alreadySavedToken = false;
-                  for(int i = 0; i < room.tokenList.length; i++) {
-                    if(currentUser.FCMToken == room.tokenList[i]) {
-                      alreadySavedToken = true;
-                    }
-                  }
-
-                  /// 토큰 추가 안된 경우에만 추가해주기
-                  if(!alreadySavedToken) {
-                    tokenList = room.tokenList;
-                    tokenList.add(currentUser.FCMToken);
-                  } else {
-                    tokenList = room.tokenList;
-                  }
-
-                  DatabaseService().addFcmToken(room, tokenList);
+                  // /// 사용자 입장시 사용자의 토큰값 저장
+                  // List<dynamic>? tokenList;
+                  // bool alreadySavedToken = false;
+                  // for(int i = 0; i < room.tokenList.length; i++) {
+                  //   if(currentUser.FCMToken == room.tokenList[i]) {
+                  //     alreadySavedToken = true;
+                  //   }
+                  // }
+                  //
+                  // /// 토큰 추가 안된 경우에만 추가해주기
+                  // if(!alreadySavedToken) {
+                  //   tokenList = room.tokenList;
+                  //   tokenList.add(currentUser.FCMToken);
+                  // } else {
+                  //   tokenList = room.tokenList;
+                  // }
+                  DatabaseService().addUserId(room.id, currentUser.id);
+                  DatabaseService().addFcmToken(room.id, [currentUser.FCMToken]);
                   Get.offAll(() => MyRoomScreen(room: room,));
                 }
               },

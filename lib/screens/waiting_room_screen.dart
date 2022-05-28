@@ -276,7 +276,7 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
   }
 
   goToRoom(RoomModel room) {
-    // DatabaseService().addFcmToken(room, [currentUser.FCMToken]);
+    DatabaseService().addFcmToken(room.id, [currentUser.FCMToken]);
     Get.to(() => MyRoomScreen(room: room));
   }
   titleText(String title) {
