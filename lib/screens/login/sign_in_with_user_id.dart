@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:room_exit_hint_app/db/database.dart';
 import 'package:room_exit_hint_app/models/current_user.dart';
 import 'package:room_exit_hint_app/screens/login/sign_up_with_user_id.dart';
@@ -14,6 +15,8 @@ import 'package:room_exit_hint_app/widgets/room_exit_body.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../home_screen.dart';
+import '../../notification/notification_bloc.dart';
+import '../../notification/notification_service.dart';
 
 class SignInPageWithUserId extends StatefulWidget {
   @override
@@ -102,11 +105,28 @@ class SignInPageWithUserIdState extends State<SignInPageWithUserId> {
     } else if (password != dbPassword) {
       checkIdPasswordPopup('비밀번호 확인', "비밀번호가 잘못 입력되었습니다.");
     } else {
+      /// 푸시 알림 초기화 하기
+      Future.delayed(const Duration(milliseconds: 0)).then((_) {
+        NotificationService()
+            .initFirebasePushNotification(context)
+            .then((_) => context.read<NotificationBloc>().checkSubscription())
+            .then((_) {});
+      }).then((_) {});
+
       // 해당 정보 다시 가져오기
       dbUserData = await ds.getUserInfo(userId!);
-      // 현재 유저정보에 값 셋팅하기
+
       setState(() {
         currentUser = CurrentUser.fromDocument(dbUserData);
+      });
+
+      NotificationService().getToken().then((value) async {
+        /// token 업데이트
+        await userReference.doc(currentUser.id).update({'FCMToken': value});
+
+        /// 현재 로그인 유저 값에도 업데이트
+        currentUser.FCMToken = value!;
+        // }
       });
 
       Navigator.pushReplacement(

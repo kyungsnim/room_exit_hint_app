@@ -50,25 +50,6 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
 
   @override
   void initState() {
-    /// 푸시 알림 초기화 하기
-    Future.delayed(const Duration(milliseconds: 0)).then((_) {
-      NotificationService()
-          .initFirebasePushNotification(context)
-          .then((_) => context.read<NotificationBloc>().checkSubscription())
-          .then((_) {});
-    }).then((_) {});
-
-    NotificationService().getToken().then((value) async {
-      print('Token : $value');
-      print('DB Token : ${currentUser.FCMToken}');
-
-      /// token 이 갱신된 경우 업데이트
-      if (currentUser.FCMToken != "" && currentUser.FCMToken != value!) {
-        print('here');
-        await userReference.doc(currentUser.id).update({'FCMToken': value});
-      }
-    });
-
     DatabaseService().getAvailableRooms().then((value) {
       setState(() {
         roomList = value.docs;

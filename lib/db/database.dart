@@ -4,6 +4,7 @@ import 'package:room_exit_hint_app/models/room_model.dart';
 import 'package:room_exit_hint_app/screens/waiting_room_screen.dart';
 
 import '../home_screen.dart';
+import '../screens/login/sign_in_with_user_id.dart';
 
 class DatabaseService {
   // 로그인을 위한 회원 로그인정보록 가져오기
